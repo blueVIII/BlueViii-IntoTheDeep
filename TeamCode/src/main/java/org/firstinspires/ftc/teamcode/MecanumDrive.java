@@ -62,6 +62,10 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
+        // motor constants
+        public final double TICKS_PER_REV = 537.7;
+        public final double MAX_RPM = 312;
+
         // drive model parameters
         public double inPerTick = 0.02434181;
         public double lateralInPerTick = 0.02604463;
