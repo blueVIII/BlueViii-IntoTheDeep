@@ -40,7 +40,7 @@ public class TeleOpMode extends OpMode
     private DcMotor rearRight = null;
     private DcMotor liftMotor1 = null;
     private DcMotor liftMotor2 = null;
-    private CRServo slideIntake = null;
+    private DcMotor slideIntake = null;
     private Servo flipIntake = null;
     private CRServo spinIntake = null;
     private Servo flipBox = null;
@@ -73,7 +73,7 @@ public class TeleOpMode extends OpMode
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
 
         //things attached to lift
-        slideIntake = hardwareMap.get(CRServo.class,"slideIntake");
+        slideIntake = hardwareMap.get(DcMotor.class,"slideIntake");
         flipIntake = hardwareMap.get(Servo.class,"flipIntake");
         spinIntake = hardwareMap.get(CRServo.class,"spinIntake");
         flipBox = hardwareMap.get(Servo.class,"flipBox");
@@ -198,9 +198,9 @@ public class TeleOpMode extends OpMode
         //START LIFT ATTACHMENTS CODE
         // A, B are used control the slide that the intake is attached to
         if (gamepad2.left_stick_y < -0.8) {
-            slideIntake.setPower(1); // slide in
+            slideIntake.setPower(-0.8); // slide in
         } else if (gamepad2.left_stick_y > 0.8) {
-            slideIntake.setPower(-1); // slide out
+            slideIntake.setPower(0.8); // slide out
         } else {
             slideIntake.setPower(0);
         }
@@ -214,10 +214,13 @@ public class TeleOpMode extends OpMode
 
         // X, Y used to spin intake
         if (gamepad2.x) {
-            spinIntake.setPower(1); // start spin
+            spinIntake.setPower(-1); // start spin
         } else if (gamepad2.y) {
-            spinIntake.setPower(0); // stop spin
-        }//x extends, y retracts
+            spinIntake.setPower(1); // stop spin
+        } else {
+            spinIntake.setPower(0);
+        }
+        //x extends, y retracts
 
         // DPad up, down to flip box back and forth
         if (gamepad2.a) {
