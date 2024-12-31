@@ -40,10 +40,15 @@ public class TeleOpMode extends OpMode
     private DcMotor rearRight = null;
     private DcMotor liftMotor1 = null;
     private DcMotor liftMotor2 = null;
-    private CRServo slideIntake = null;
-    private Servo flipIntake = null;
+    private DcMotor slideIntake = null;
+
+    // lift encoder positions
+    private int liftMotor1StartPosition = 0;
+    private int liftMotor1EndPosition = 0;
+
+    /*private Servo flipIntake = null;
     private CRServo spinIntake = null;
-    private Servo flipBox = null;
+    private Servo flipBox = null; */
     /*private Servo liftClaw = null;
     private Servo liftClawRotate_Claw = null;
     private Servo liftClawRotate_Arm = null;
@@ -73,10 +78,10 @@ public class TeleOpMode extends OpMode
         liftMotor2 = hardwareMap.get(DcMotor.class, "liftMotor2");
 
         //things attached to lift
-        slideIntake = hardwareMap.get(CRServo.class,"slideIntake");
-        flipIntake = hardwareMap.get(Servo.class,"flipIntake");
+        slideIntake = hardwareMap.get(DcMotor.class,"slideIntake");
+        /*flipIntake = hardwareMap.get(Servo.class,"flipIntake");
         spinIntake = hardwareMap.get(CRServo.class,"spinIntake");
-        flipBox = hardwareMap.get(Servo.class,"flipBox");
+        flipBox = hardwareMap.get(Servo.class,"flipBox"); */
 
 
         //SETTINGS FOR MOTORS
@@ -104,6 +109,10 @@ public class TeleOpMode extends OpMode
     // Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
+        liftMotor1StartPosition = liftMotor2.getCurrentPosition();
+        liftMotor1EndPosition = 4500;  // upper limit
+
+        telemetry.addData("lift2 Start Position", liftMotor1StartPosition);
     }
 
     // Code to run ONCE when the driver hits PLAY
@@ -145,15 +154,17 @@ public class TeleOpMode extends OpMode
             rearRight.setPower(rearRightPower * .85);
         }
 
-        if (gamepad2.right_stick_y < -0.8) { //if stick is forward
+        int liftMotor1Position = liftMotor1.getCurrentPosition();
+
+        if (gamepad2.right_stick_y < -0.8 && liftMotor1Position < (liftMotor1EndPosition)) { //if stick is forward
             liftMotor1.setPower(0.8);
             liftMotor2.setPower(0.8);
-        } else if (gamepad2.right_stick_y > 0.8) { //if stick is back
-            liftMotor1.setPower(-0.6);
-            liftMotor2.setPower(-0.6);
+        } else if (gamepad2.right_stick_y > 0.8 && liftMotor1Position > (liftMotor1StartPosition)) { //if stick is back
+            liftMotor1.setPower(-0.8);
+            liftMotor2.setPower(-0.8);
         } else {
-            liftMotor1.setPower(-0.05);
-            liftMotor2.setPower(-0.05);
+            liftMotor1.setPower(0.05);
+            liftMotor2.setPower(0.05);
         }
         telemetry.addData("lift", liftMotor2.getCurrentPosition());
         telemetry.addData("lift", liftMotor2.getPower());
@@ -197,34 +208,34 @@ public class TeleOpMode extends OpMode
 
         //START LIFT ATTACHMENTS CODE
         // A, B are used control the slide that the intake is attached to
-        if (gamepad2.left_stick_y < -0.8) {
-            slideIntake.setPower(1); // slide in
-        } else if (gamepad2.left_stick_y > 0.8) {
-            slideIntake.setPower(-1); // slide out
-        } else {
-            slideIntake.setPower(0);
-        }
-
-        // Left, right bumper used to flip intake
-        if (gamepad2.left_bumper) {
-            flipIntake.setPosition(0); // flip intake in
-        } else if (gamepad2.right_bumper) {
-            flipIntake.setPosition(1); // flip intake out
-        } //right rotates to floor, left rotates back up
-
-        // X, Y used to spin intake
-        if (gamepad2.x) {
-            spinIntake.setPower(1); // start spin
-        } else if (gamepad2.y) {
-            spinIntake.setPower(0); // stop spin
-        }//x extends, y retracts
-
-        // DPad up, down to flip box back and forth
-        if (gamepad2.a) {
-            flipBox.setPosition(1); // flip out box
-        } else if (gamepad2.b) {
-            flipBox.setPosition(0); // flip box back in
-        } // up - rotate to ground, down - rotate upwards
+//        if (gamepad2.left_stick_y < -0.8) {
+//            slideIntake.setPower(1); // slide in
+//        } else if (gamepad2.left_stick_y > 0.8) {
+//            slideIntake.setPower(-1); // slide out
+//        } else {
+//            slideIntake.setPower(0);
+//        }
+//
+//        // Left, right bumper used to flip intake
+//        if (gamepad2.left_bumper) {
+//            flipIntake.setPosition(0); // flip intake in
+//        } else if (gamepad2.right_bumper) {
+//            flipIntake.setPosition(1); // flip intake out
+//        } //right rotates to floor, left rotates back up
+//
+//        // X, Y used to spin intake
+//        if (gamepad2.x) {
+//            spinIntake.setPower(1); // start spin
+//        } else if (gamepad2.y) {
+//            spinIntake.setPower(0); // stop spin
+//        }//x extends, y retracts
+//
+//        // DPad up, down to flip box back and forth
+//        if (gamepad2.a) {
+//            flipBox.setPosition(1); // flip out box
+//        } else if (gamepad2.b) {
+//            flipBox.setPosition(0); // flip box back in
+//        } // up - rotate to ground, down - rotate upwards
 
         /*if (gamepad2.left_stick_button) { //reset preset
             //lift min, arm retract, arm rotate down, claw rotate dpad up
