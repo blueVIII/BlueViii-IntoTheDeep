@@ -45,9 +45,10 @@ public class TeleOpMode extends OpMode
     // lift encoder positions
     private int liftMotor1StartPosition = 0;
     final int liftMotor1EndPosition = 4805;
-    private int liftMotor1EndPosition = 0;
-    private int slideIntakeStartPosition = 109;
-    private int slideIntakeEndPosition = -1250;
+    private int slideIntakeStartPosition; //109
+    private int slideIntakeEndPosition;
+
+    private long bumperPressTime = 0;
 
     private Servo rotateArm = null;
     private Servo bottomClaw = null;
@@ -102,6 +103,9 @@ public class TeleOpMode extends OpMode
         liftMotor2.setDirection(DcMotor.Direction.REVERSE);
         liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        slideIntakeStartPosition = slideIntake.getCurrentPosition();
+        slideIntakeEndPosition = slideIntakeStartPosition - 1400;
 
         //intakeMotor.setDirection(DcMotor.Direction.FORWARD);
         //door.setPosition(0);
@@ -195,7 +199,7 @@ public class TeleOpMode extends OpMode
 
         // Co-Driver Bottom claw rotation
         if (gamepad2.x) {
-            rotateBClaw.setPosition(0.72); // rotate bottom claw to original position
+            rotateBClaw.setPosition(0.70); // rotate bottom claw to original position
         } else if (gamepad2.y) {
             rotateBClaw.setPosition(0.38); // rotate bottom claw to second position
         }
@@ -206,9 +210,9 @@ public class TeleOpMode extends OpMode
 
         // Co-Driver Extend claw intake
         if (gamepad2.left_stick_y < -0.8 && slideIntakePosition > (slideIntakeEndPosition)) {
-            slideIntake.setPower(-0.7); // slide out
+            slideIntake.setPower(-0.5); // slide out
         } else if (gamepad2.left_stick_y > 0.8  && slideIntakePosition < (slideIntakeStartPosition)) {
-            slideIntake.setPower(0.7); // slide in
+            slideIntake.setPower(0.5); // slide in
         } else {
             slideIntake.setPower(0);
         }
@@ -221,15 +225,68 @@ public class TeleOpMode extends OpMode
 
         if (gamepad2.left_bumper) {
             flipTClaw.setPosition(0.9); // flip the top claw into the robot
-            rotateTClaw.setPosition(0.8); // rotate top claw to be vertical
+            rotateTClaw.setPosition(0.85); // rotate top claw to be vertical
             topClaw.setPosition(0); // open top claw
         }
 
         // Co-Driver Bottom Claw
         if (gamepad2.right_bumper) {
-            bottomClaw.setPosition(0); // open bottom claw
+            // preset of bottom claw open, top claw close, lift down, top claw flip for exchange,
             topClaw.setPosition(1); // close top claw
+            bumperPressTime = System.nanoTime();
+            telemetry.addData("nanotimedif", System.nanoTime() - bumperPressTime);
         }
+
+        if (bumperPressTime != 0 && System.nanoTime() - bumperPressTime > 200000000) {
+            bottomClaw.setPosition(0); // open bottom claw
+        }
+
+        if (bumperPressTime != 0 && System.nanoTime() - bumperPressTime > 500000000) {
+            flipTClaw.setPosition(0); // flip the top claw out of the robot
+            bumperPressTime = 0;
+        }
+
+
+
+        /*if (gamepad1.x) {
+            flipTClaw.setPosition(0);
+        } */
+
+        if (gamepad2.dpad_left) {
+            //Rotate Bottom Claw, Bottom Close Claw, Retract, Flip Bottom Claw,
+            rotateBClaw.setPosition(0.70); // rotate bottom claw to OG position
+            bottomClaw.setPosition(1); // close bottom claw
+            rotateArm.setPosition(0); // rotate bottom claw arm back in
+            if (slideIntakePosition < (slideIntakeStartPosition - 280))  {
+                slideIntake.setPower(0.7); // slide in
+            }
+        }
+
+
+        if (gamepad2.dpad_right) {
+            // Lift Down, Top Claw Open, Top Claw Flip
+            if (liftMotor1Position > (liftMotor1StartPosition-10)) { //if stick is back
+                liftMotor1.setPower(-0.8);
+                liftMotor2.setPower(-0.8);
+            }
+            topClaw.setPosition(0); // open top claw
+        }
+
+        if (gamepad2.left_trigger > 0.2) {
+            // top claw rotate, top claw open
+            topClaw.setPosition(0); // open top claw
+            flipTClaw.setPosition(0.085); // flip to align
+        }
+        if (gamepad2.left_trigger > 0.9) {
+            flipTClaw.setPosition(0.15); // flip to align
+        }
+
+        if (gamepad2.right_trigger > 0.3) {
+            flipTClaw.setPosition(0.45);
+            rotateTClaw.setPosition(0.6);
+        }
+
+
 
 
         /*    23-24 lift pos aware code
