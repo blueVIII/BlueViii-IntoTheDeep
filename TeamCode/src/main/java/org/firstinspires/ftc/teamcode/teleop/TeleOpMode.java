@@ -45,6 +45,8 @@ public class TeleOpMode extends OpMode
     // lift encoder positions
     private int liftMotor1StartPosition = 0;
     private int liftMotor1EndPosition = 0;
+    private int slideIntakeStartPosition = 109;
+    private int slideIntakeEndPosition = -1250;
 
     private Servo rotateArm = null;
     private Servo bottomClaw = null;
@@ -157,6 +159,7 @@ public class TeleOpMode extends OpMode
         }
 
         int liftMotor1Position = liftMotor1.getCurrentPosition();
+        int slideIntakePosition = slideIntake.getCurrentPosition();
 
         if (gamepad2.right_stick_y < -0.8 && liftMotor1Position < (liftMotor1EndPosition)) { //if stick is forward
             liftMotor1.setPower(0.8);
@@ -171,6 +174,8 @@ public class TeleOpMode extends OpMode
         telemetry.addData("lift", liftMotor2.getCurrentPosition());
         telemetry.addData("lift", liftMotor2.getPower());
 
+        telemetry.addData("horizontal slide", slideIntake.getCurrentPosition());
+
         if (gamepad1.b) {
             bottomClaw.setPosition(0); // open bottom claw
         } else if (gamepad1.a) {
@@ -184,18 +189,18 @@ public class TeleOpMode extends OpMode
         }
 
         if (gamepad2.x) {
-            rotateBClaw.setPosition(1); // rotate bottom claw to original position
+            rotateBClaw.setPosition(0.72); // rotate bottom claw to original position
         } else if (gamepad2.y) {
-            rotateBClaw.setPosition(0.68); // rotate bottom claw to second position ROTATES TO OG
+            rotateBClaw.setPosition(0.38); // rotate bottom claw to second position
         }
 
         if (gamepad2.dpad_down) {
-            rotateArm.setPosition(1); // rotate bottom claw to original position
+            rotateArm.setPosition(1); // rotate bottom claw arm out
         }
 
-        if (gamepad2.left_stick_y < -0.8) {
+        if (gamepad2.left_stick_y < -0.8 && slideIntakePosition > (slideIntakeEndPosition)) {
             slideIntake.setPower(-0.7); // slide out
-        } else if (gamepad2.left_stick_y > 0.8) {
+        } else if (gamepad2.left_stick_y > 0.8 && slideIntakePosition < (slideIntakeStartPosition))  {
             slideIntake.setPower(0.7); // slide in
         } else {
             slideIntake.setPower(0);
@@ -215,6 +220,21 @@ public class TeleOpMode extends OpMode
         if (gamepad2.right_bumper) {
             bottomClaw.setPosition(0); // open bottom claw
             topClaw.setPosition(1); // close top claw
+        }
+
+        if (gamepad2.dpad_left) {
+            //Rotate Bottom Claw, Bottom Close Claw, Retract, Flip Bottom Claw,
+            rotateBClaw.setPosition(0.72); // rotate bottom claw to OG position
+            bottomClaw.setPosition(1); // close bottom claw
+            rotateArm.setPosition(0); // rotate bottom claw arm back in
+            if (slideIntakePosition < (-110))  {
+                slideIntake.setPower(0.7); // slide in
+            }
+        }
+
+        if (gamepad2.dpad_right) {
+            // Lift Down, Top Claw Open, Top Claw Flip
+
         }
 
 
