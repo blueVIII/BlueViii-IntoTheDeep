@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
@@ -14,6 +15,9 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 public class DriveSquare extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+
+        Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
+
         telemetry.setMsTransmissionInterval(50);
 
         Pose2d initPos = new Pose2d(0, 0, 0);

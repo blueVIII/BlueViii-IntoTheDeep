@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import androidx.annotation.NonNull;
 
-// RR-specific imports
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
@@ -13,22 +12,20 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-
-// Non-RR imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
-@Autonomous(name = "BlueSpecAuto", group = "Autonomous")
-public class BlueSpecAuto extends LinearOpMode {
+@Autonomous(name = "BlueTest", group = "Autonomous")
+public class BlueTest extends LinearOpMode {
 
     public class Lift {
         private DcMotorEx liftMotor1, liftMotor2;
@@ -46,9 +43,6 @@ public class BlueSpecAuto extends LinearOpMode {
             liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
             liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            int liftMotor1StartPosition;
-            int liftMotor1EndPosition;
         }
 
         private void moveLiftToPosition(int targetPosition, double power) {
@@ -81,47 +75,6 @@ public class BlueSpecAuto extends LinearOpMode {
                 public boolean run(@NonNull TelemetryPacket packet) {
                     if (!initialized) {
                         moveLiftToPosition(targetPosition, power);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-    }
-
-    public class SlideIntake {
-        private DcMotorEx slideMotor;
-
-        public SlideIntake(HardwareMap hardwareMap) {
-            slideMotor = hardwareMap.get(DcMotorEx.class, "slideIntake");
-            slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-        private void moveToPosition(int targetPosition, double power) {
-            slideMotor.setTargetPosition(targetPosition);
-            slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(power);
-
-            while (slideMotor.isBusy() && opModeIsActive()) {
-                telemetry.addData("SlideIntake Position", slideMotor.getCurrentPosition());
-                telemetry.update();
-            }
-
-            slideMotor.setPower(0);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-
-        public Action slideMoveAction(int targetPosition, double power) {
-            return new Action() {
-                private boolean initialized = false;
-
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                    if (!initialized) {
-                        moveToPosition(targetPosition, power);
                         initialized = true;
                     }
                     return false;
@@ -183,54 +136,39 @@ public class BlueSpecAuto extends LinearOpMode {
         }
     }
 
-
+    //-------------------------------------------------------------------------
+    // MAIN AUTONOMOUS CODE
+    //-------------------------------------------------------------------------
     @Override
     public void runOpMode() {
-
-
-
-        Pose2d initialPose = new Pose2d(0, 0, 0);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-
-        Lift lift            = new Lift(hardwareMap);
-        SlideIntake slide    = new SlideIntake(hardwareMap);
-        RobotServos servos   = new RobotServos(hardwareMap);
-        Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
-
-
+        // 1) INITIALIZE DRIVE (frontLeft, rearLeft, frontRight, rearRight)
+        //    and set the robot's starting pose
         double halfWidth = 7.4375;
         double halfLength = 8.125;
-
-        lift.liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slide.slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        /*int liftMotor1StartPosition = lift.liftMotor1.getCurrentPosition();
-        int liftMotor1EndPosition = liftMotor1StartPosition + 4650; */
+        Pose2d initialPose = new Pose2d(24 - halfWidth, -72 + halfLength, Math.toRadians(90));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
 
-        Action liftToHighJunction = lift.moveLiftAction(3000, 0.8);
-        Action liftToLowPosition  = lift.moveLiftAction( 100, 0.6);
-        Action liftDown = lift.moveLiftAction(0, 0.8);
+        // 2) INITIALIZE LIFT & CLAW
+        Lift lift = new Lift(hardwareMap);
+        RobotServos servos  = new RobotServos(hardwareMap);
+        Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
 
-        Action slideIn  = slide.slideMoveAction( 109,  0.7);
-        Action slideOut = slide.slideMoveAction(-1250, 0.7);
+        int liftMotor1StartPosition = lift.liftMotor1.getCurrentPosition();
+        int specimenHangingPosition = liftMotor1StartPosition + 3000;
 
+        Action liftToHangSpecimen = lift.moveLiftAction(3000, 0.8);
         Action openBottomClaw  = servos.moveBottomClaw(0.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for specimen
         Action rotateTClaw = servos.moveRotateTClaw(1); // for specimen
-;
-        TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-12 + halfWidth, -39.5 + halfLength));
 
-        /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
+        // 4) BUILD YOUR TRAJECTORIES
+        //    This is purely an example that you can revise for your route
+        TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(-12 + halfWidth, -39.5 + halfLength))
-                .waitSeconds(1)
+                /*.waitSeconds(1)
                 .lineToY(-42.5 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
                 .setTangent(Math.toRadians(90))
@@ -240,11 +178,6 @@ public class BlueSpecAuto extends LinearOpMode {
                 .lineToY(-52, null, new ProfileAccelConstraint(-80, 80))
                 .lineToY(-22 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(63, -22 + halfLength), null, new ProfileAccelConstraint(-80, 80))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-52)
-                .lineToY(-22 + halfLength)
-                .waitSeconds(0.01)
-                .strafeTo(new Vector2d(71.5, -22 + halfLength))
                 .setTangent(Math.toRadians(90))
                 .lineToY(-52)
                 .strafeTo(new Vector2d(64,-42), null, new ProfileAccelConstraint(-80, 80))
@@ -258,87 +191,35 @@ public class BlueSpecAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(45, -76 + halfLength, Math.toRadians(250)),Math.toRadians(250), null, new ProfileAccelConstraint(-80, 80))
                 .waitSeconds(1)
                 .strafeTo(new Vector2d(35, -65 + halfLength), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-6, -39.5 + halfLength, Math.toRadians(90)),Math.toRadians(90), null, new ProfileAccelConstraint(-80, 80));
-                */
+                .splineToLinearHeading(new Pose2d(-6, -39.5 + halfLength, Math.toRadians(90)),Math.toRadians(90), null, new ProfileAccelConstraint(-80, 80))*/
+                ;
 
-        /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-12, -39.5))
-                .waitSeconds(1);
-
-        TrajectoryActionBuilder drive2 = drive.actionBuilder(initialPose)
-                .lineToY(-42.5, null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(47, -45.5), null, new ProfileAccelConstraint(-80, 80))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-22, null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(53, -22), null, new ProfileAccelConstraint(-80, 80))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-52, null, new ProfileAccelConstraint(-80, 80))
-                .lineToY(-22, null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(63, -22), null, new ProfileAccelConstraint(-80, 80))
-                .setTangent(Math.toRadians(90))
-                .lineToY(-52)
-                .strafeTo(new Vector2d(64, -42), null, new ProfileAccelConstraint(-80, 80))
-                .setTangent(Math.toRadians(90));
-        TrajectoryActionBuilder drive3 = drive.actionBuilder(initialPose)
-                .splineToLinearHeading(new Pose2d(52, -76, Math.toRadians(250)), Math.toRadians(250),
-                        null, new ProfileAccelConstraint(-80, 80))
-                .waitSeconds(1);
-        TrajectoryActionBuilder drive4 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(42, -65), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-6, -39.5, Math.toRadians(90)), Math.toRadians(90),
-                        null, new ProfileAccelConstraint(-80, 80))
-                .waitSeconds(1);
-        TrajectoryActionBuilder drive5 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(5, -45), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(45, -76, Math.toRadians(250)), Math.toRadians(250),
-                        null, new ProfileAccelConstraint(-80, 80))
-                .waitSeconds(1);
-        TrajectoryActionBuilder drive6 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(35, -65), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-6, -39.5, Math.toRadians(90)), Math.toRadians(90),
-                        null, new ProfileAccelConstraint(-80, 80));
-
-        Action trajectoryAction1 = drive1.build();
-        Action trajectoryAction2 = drive2.build();
-        Action trajectoryAction3 = drive3.build();
-        Action trajectoryAction4 = drive4.build();
-        Action trajectoryAction5 = drive5.build();
-        Action trajectoryAction6 = drive6.build();
-
-         */
-        Action trajectoryAction1 = drive1.build();
-
-        while (!isStarted() && !isStopRequested()) {
-            telemetry.update();
-        }
+        // 5) (OPTIONAL) DO ANY ACTIONS ON INIT
+        //Actions.runBlocking(claw.closeClaw()); // For instance, keep claw closed
 
         waitForStart();
+        if (isStopRequested()) return;
 
-//        Actions.runBlocking(
-//                new SequentialAction (
-//
-//                        liftToHighJunction,
-//                        liftDown
-//                        //slideOut,
-//                        //closeBottomClaw,
-//                        //trajectoryAction1
-//                )
-//        );
-        while (opModeIsActive()) {
-            telemetry.addData("Autonomous", "Started");
-            //rotateArm.setPosition(1.0);
-            telemetry.addData("Autonomous", "Complete");
-            Actions.runBlocking(
-                    new ParallelAction (
-                            trajectoryAction1,
-                            liftToHighJunction,
-                            flipTClawOut,
-                            rotateTClaw
-                    )
-            );
+        telemetry.addData("Autonomous", "Started");
+        rotateArm.setPosition(1.0);
+        telemetry.addData("Autonomous", "Complete");
 
-            telemetry.addData("Autonomous", "Complete");
-            telemetry.update();
-        }
+        Action trajectoryAction1 = drive1.build();
+
+
+
+        // 8) RUN THE ACTION SEQUENCE
+        /*Actions.runBlocking(
+                new SequentialAction(
+                        trajectoryAction1,
+                        liftToHangSpecimen,
+                        flipTClawOut,
+                        rotateTClaw
+                )
+        ); */
     }
 }
+
+
+
+
