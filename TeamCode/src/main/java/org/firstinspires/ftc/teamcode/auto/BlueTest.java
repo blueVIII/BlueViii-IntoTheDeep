@@ -161,7 +161,7 @@ public class BlueTest extends LinearOpMode {
         Action openBottomClaw  = servos.moveBottomClaw(0.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.45); // for specimen
+        Action flipTClawOut = servos.moveFlipTClaw(0); // for specimen
         Action rotateTClaw = servos.moveRotateTClaw(1); // for specimen
 
         // 4) BUILD YOUR TRAJECTORIES

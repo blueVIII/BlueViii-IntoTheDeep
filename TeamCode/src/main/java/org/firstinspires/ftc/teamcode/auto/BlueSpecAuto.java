@@ -187,19 +187,16 @@ public class BlueSpecAuto extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        double halfWidth = 7.4375;
+        double halfLength = 8.125;
 
-
-        Pose2d initialPose = new Pose2d(0, 0, 0);
+        Pose2d initialPose = new Pose2d(24 - halfWidth, -72 + halfLength, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         Lift lift            = new Lift(hardwareMap);
         SlideIntake slide    = new SlideIntake(hardwareMap);
         RobotServos servos   = new RobotServos(hardwareMap);
         Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
-
-
-        double halfWidth = 7.4375;
-        double halfLength = 8.125;
 
         lift.liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -213,7 +210,7 @@ public class BlueSpecAuto extends LinearOpMode {
 
 
         Action liftToHighJunction = lift.moveLiftAction(3000, 0.8);
-        Action liftToLowPosition  = lift.moveLiftAction( 100, 0.6);
+        Action liftToLowPosition  = lift.moveLiftAction( 1500, 0.8);
         Action liftDown = lift.moveLiftAction(0, 0.8);
 
         Action slideIn  = slide.slideMoveAction( 109,  0.7);
@@ -221,12 +218,32 @@ public class BlueSpecAuto extends LinearOpMode {
 
         Action openBottomClaw  = servos.moveBottomClaw(0.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
+        Action closeTopClaw = servos.moveTopClaw(1.0);
+        Action openTopClaw = servos.moveTopClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.45); // for specimen
+        Action flipTClawOut = servos.moveFlipTClaw(0); // for specimen
         Action rotateTClaw = servos.moveRotateTClaw(1); // for specimen
 ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-12 + halfWidth, -39.5 + halfLength));
+                .strafeTo(new Vector2d(-12 + halfWidth, -36 + halfLength))
+                .waitSeconds(0.01);
+
+        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -36 + halfLength,Math.toRadians(90)))
+                .lineToY(-42.5 + halfLength, null, new ProfileAccelConstraint(-80, 80))
+                .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
+                .setTangent(Math.toRadians(90))
+                .lineToY(-22 + halfLength, null, new ProfileAccelConstraint(-80, 80))
+                .strafeTo(new Vector2d(53, -22 + halfLength),null, new ProfileAccelConstraint(-80, 80))
+                .setTangent(Math.toRadians(90))
+                .lineToY(-52, null, new ProfileAccelConstraint(-80, 80))
+                .lineToY(-22 + halfLength, null, new ProfileAccelConstraint(-80, 80))
+                .strafeTo(new Vector2d(63, -22 + halfLength), null, new ProfileAccelConstraint(-80, 80))
+                .setTangent(Math.toRadians(90))
+                .lineToY(-52)
+                .strafeTo(new Vector2d(64,-35), null, new ProfileAccelConstraint(-80, 80))
+                .setTangent(Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(52, -75 + halfLength, Math.toRadians(260)),Math.toRadians(260), null, new ProfileAccelConstraint(-80, 80))
+                ;
 
         /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(-12 + halfWidth, -39.5 + halfLength))
@@ -307,6 +324,9 @@ public class BlueSpecAuto extends LinearOpMode {
 
          */
         Action trajectoryAction1 = drive1.build();
+        Action trajectoryAction2 = drive2.build();
+
+        Actions.runBlocking(closeTopClaw);
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.update();
@@ -324,19 +344,23 @@ public class BlueSpecAuto extends LinearOpMode {
 //                        //trajectoryAction1
 //                )
 //        );
+
         while (opModeIsActive()) {
             telemetry.addData("Autonomous", "Started");
             //rotateArm.setPosition(1.0);
             telemetry.addData("Autonomous", "Complete");
             Actions.runBlocking(
-                    new ParallelAction (
-                            trajectoryAction1,
+                    new SequentialAction (
+                            closeTopClaw,
                             liftToHighJunction,
                             flipTClawOut,
-                            rotateTClaw
+                            trajectoryAction1,
+                            liftToLowPosition,
+                            openTopClaw,
+                            liftDown,
+                            trajectoryAction2
                     )
             );
-
             telemetry.addData("Autonomous", "Complete");
             telemetry.update();
         }
