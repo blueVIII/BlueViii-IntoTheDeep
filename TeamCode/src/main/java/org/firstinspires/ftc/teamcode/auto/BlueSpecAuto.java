@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
-import androidx.annotation.NonNull;
-
 // RR-specific imports
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -17,172 +13,13 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 // Non-RR imports
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+        import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.MecanumDrive;
+        import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
 @Autonomous(name = "BlueSpecAuto", group = "Autonomous")
 public class BlueSpecAuto extends LinearOpMode {
-
-    public class Lift {
-        private DcMotorEx liftMotor1, liftMotor2;
-
-        public Lift(HardwareMap hardwareMap) {
-            liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
-            liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
-
-            liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            liftMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
-            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
-            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            int liftMotor1StartPosition;
-            int liftMotor1EndPosition;
-        }
-
-        private void moveLiftToPosition(int targetPosition, double power) {
-            liftMotor1.setTargetPosition(targetPosition);
-            liftMotor2.setTargetPosition(targetPosition);
-
-            liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            liftMotor1.setPower(power);
-            liftMotor2.setPower(power);
-
-            while (liftMotor1.isBusy() && liftMotor2.isBusy() && opModeIsActive()) {
-                telemetry.addData("LiftMotor1 Position", liftMotor1.getCurrentPosition());
-                telemetry.addData("LiftMotor2 Position", liftMotor2.getCurrentPosition());
-                telemetry.update();
-            }
-
-            liftMotor1.setPower(0);
-            liftMotor2.setPower(0);
-            liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-        public Action moveLiftAction(int targetPosition, double power) {
-            return new Action() {
-                private boolean initialized = false;
-
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                    if (!initialized) {
-                        moveLiftToPosition(targetPosition, power);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-    }
-
-    public class SlideIntake {
-        private DcMotorEx slideMotor;
-
-        public SlideIntake(HardwareMap hardwareMap) {
-            slideMotor = hardwareMap.get(DcMotorEx.class, "slideIntake");
-            slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-            slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-        private void moveToPosition(int targetPosition, double power) {
-            slideMotor.setTargetPosition(targetPosition);
-            slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slideMotor.setPower(power);
-
-            while (slideMotor.isBusy() && opModeIsActive()) {
-                telemetry.addData("SlideIntake Position", slideMotor.getCurrentPosition());
-                telemetry.update();
-            }
-
-            slideMotor.setPower(0);
-            slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
-
-        public Action slideMoveAction(int targetPosition, double power) {
-            return new Action() {
-                private boolean initialized = false;
-
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                    if (!initialized) {
-                        moveToPosition(targetPosition, power);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-    }
-
-    public class RobotServos {
-        private Servo rotateArm;
-        private Servo bottomClaw;
-        private Servo rotateBClaw;
-        private Servo flipTClaw;
-        private Servo rotateTClaw;
-        private Servo topClaw;
-
-        public RobotServos(HardwareMap hardwareMap) {
-            rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
-            bottomClaw   = hardwareMap.get(Servo.class, "bottomClaw");
-            rotateBClaw  = hardwareMap.get(Servo.class, "rotateBClaw");
-            flipTClaw    = hardwareMap.get(Servo.class, "flipTClaw");
-            rotateTClaw  = hardwareMap.get(Servo.class, "rotateTClaw");
-            topClaw      = hardwareMap.get(Servo.class, "topClaw");
-        }
-
-
-        public Action setServoPosition(Servo servo, double targetPos) {
-            return new Action() {
-                private boolean initialized = false;
-
-                @Override
-                public boolean run(@NonNull TelemetryPacket packet) {
-                    if (!initialized) {
-                        servo.setPosition(targetPos);
-                        initialized = true;
-                    }
-                    return false;
-                }
-            };
-        }
-
-        public Action moveBottomClaw(double position) {
-            return setServoPosition(bottomClaw, position);
-        }
-        public Action moveTopClaw(double position) {
-            return setServoPosition(topClaw, position);
-        }
-        public Action moveRotateArm(double position) {
-            return setServoPosition(rotateArm, position);
-        }
-        public Action moveRotateBClaw(double position) {
-            return setServoPosition(rotateBClaw, position);
-        }
-        public Action moveFlipTClaw(double position) {
-            return setServoPosition(flipTClaw, position);
-        }
-        public Action moveRotateTClaw(double position) {
-            return setServoPosition(rotateTClaw, position);
-        }
-    }
-
 
     @Override
     public void runOpMode() {
@@ -193,17 +30,13 @@ public class BlueSpecAuto extends LinearOpMode {
         Pose2d initialPose = new Pose2d(24 - halfWidth, -72 + halfLength, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
-        Lift lift            = new Lift(hardwareMap);
-        SlideIntake slide    = new SlideIntake(hardwareMap);
+        Lift lift            = new Lift(hardwareMap, telemetry);
+        lift.Init();
+        SlideIntake slide    = new SlideIntake(hardwareMap, telemetry);
+        slide.Init();
         RobotServos servos   = new RobotServos(hardwareMap);
         Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
 
-        lift.liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slide.slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         /*int liftMotor1StartPosition = lift.liftMotor1.getCurrentPosition();
         int liftMotor1EndPosition = liftMotor1StartPosition + 4650; */
@@ -334,21 +167,9 @@ public class BlueSpecAuto extends LinearOpMode {
 
         waitForStart();
 
-//        Actions.runBlocking(
-//                new SequentialAction (
-//
-//                        liftToHighJunction,
-//                        liftDown
-//                        //slideOut,
-//                        //closeBottomClaw,
-//                        //trajectoryAction1
-//                )
-//        );
-
         while (opModeIsActive()) {
             telemetry.addData("Autonomous", "Started");
-            //rotateArm.setPosition(1.0);
-            telemetry.addData("Autonomous", "Complete");
+
             Actions.runBlocking(
                     new SequentialAction (
                             closeTopClaw,

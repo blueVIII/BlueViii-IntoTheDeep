@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 @Config
 @Autonomous(name = "BlueSpecimenAuto", group = "Autonomous")
 public class BlueSpecimenAuto extends LinearOpMode {
+
     public class Lift {
         private DcMotorEx liftMotor1, liftMotor2;
 
