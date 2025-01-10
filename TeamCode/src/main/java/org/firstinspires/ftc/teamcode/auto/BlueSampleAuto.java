@@ -32,13 +32,16 @@ public class BlueSampleAuto extends LinearOpMode {
         SlideIntake slideIntake = new SlideIntake(hardwareMap, telemetry);
         slideIntake.Init();
         RobotServos servos   = new RobotServos(hardwareMap);
+        double slideIntakeStartPos = slideIntake.GetPosition();
 
         // building trajectories
         TrajectoryActionBuilder driveToBucket = drive.actionBuilder(initialPose)
-                .splineToLinearHeading(new Pose2d(-72 - halfWidth, -72 + halfLength, Math.toRadians(210)),Math.toRadians(210), null, new ProfileAccelConstraint(-80, 80));
+                .splineToLinearHeading(new Pose2d(-68 - halfWidth, -68 + halfLength, Math.toRadians(210)),Math.toRadians(210), null, new ProfileAccelConstraint(-80, 80));
 
-        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(-72 - halfWidth, -72 +halfLength, Math.toRadians(210)))
-                .lineToY(-60 + halfLength, null, new ProfileAccelConstraint(-80, 80));
+        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(-68 - halfWidth, -68 +halfLength, Math.toRadians(210)))
+                .setTangent(Math.toRadians(-150))
+                .lineToY(-63 + halfLength, null, new ProfileAccelConstraint(-80, 80))
+                .turn(Math.toRadians(45));
 
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
@@ -46,10 +49,15 @@ public class BlueSampleAuto extends LinearOpMode {
         Action liftToHighBox = lift.moveLiftAction(4800, 0.8);
         Action liftDown = lift.moveLiftAction(0, 0.8);
         Action openTopClaw = servos.moveTopClaw(0.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
+        Action flipTClawOut = servos.moveFlipTClaw(0.60); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
         Action closeTopClaw = servos.moveTopClaw(1.0);
-        Action rotateArmOut    = servos.moveRotateArm(1);
+        Action closeBottomClaw = servos.moveBottomClaw(1.0);
+        Action openBottomClaw = servos.moveBottomClaw(0.0);
+        Action rotateArmOut    = servos.moveRotateArm(1.0);
+        Action rotateArmIn    = servos.moveRotateArm(0.0);
+        Action slideIntakeOut = slideIntake.slideMoveAction(-1079, 0.7);
+        Action slideInTakeIn = slideIntake.slideMoveAction((int)slideIntakeStartPos, 0.7);
 
         Actions.runBlocking(closeTopClaw);
 
@@ -73,7 +81,101 @@ public class BlueSampleAuto extends LinearOpMode {
                             new SleepAction(0.5),
                             trajectoryBack,
                             new SleepAction(0.5),
-                            liftDown));
+                            liftDown,
+                            openBottomClaw,
+                            slideIntakeOut,
+                            rotateArmOut,
+                            new SleepAction(1),
+                            closeBottomClaw,
+                            new SleepAction(0.5),
+                            rotateArmIn,
+                            slideInTakeIn));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 }
