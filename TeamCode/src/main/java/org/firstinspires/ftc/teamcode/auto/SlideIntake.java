@@ -57,4 +57,8 @@ public class SlideIntake {
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public double GetPosition() {
+        return slideMotor.getCurrentPosition();
+    }
 }
