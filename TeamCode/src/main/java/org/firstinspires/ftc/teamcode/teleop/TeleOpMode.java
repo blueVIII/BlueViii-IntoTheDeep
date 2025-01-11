@@ -224,9 +224,9 @@ public class TeleOpMode extends OpMode
         }
 
         if (gamepad2.left_bumper) {
-            flipTClaw.setPosition(0.9); // flip the top claw into the robot
+            flipTClaw.setPosition(0.96); // flip the top claw into the robot
             rotateTClaw.setPosition(0.7); // rotate top claw to be vertical
-            topClaw.setPosition(0.4); // open top claw
+            topClaw.setPosition(0.45); // open top claw
         }
 
         // Co-Driver Bottom Claw
@@ -257,7 +257,7 @@ public class TeleOpMode extends OpMode
             rotateBClaw.setPosition(0.70); // rotate bottom claw to OG position
             bottomClaw.setPosition(1); // close bottom claw
             rotateArm.setPosition(0); // rotate bottom claw arm back in
-            if (slideIntakePosition < (slideIntakeStartPosition - 400))  {
+            if (slideIntakePosition < (slideIntakeStartPosition - 85))  {
                 slideIntake.setPower(0.7); // slide in
             }
         }
@@ -270,8 +270,8 @@ public class TeleOpMode extends OpMode
         if (gamepad2.left_trigger > 0.2) {
             // top claw rotate, top claw open
             topClaw.setPosition(0.4); // open top claw
-            flipTClaw.setPosition(0.085); // flip to align
-            rotateTClaw.setPosition(0.75);
+            flipTClaw.setPosition(0.12); // flip to align
+            rotateTClaw.setPosition(0.87); // 0 is going up, 1 is going down
         }
 
         if (gamepad2.right_trigger > 0.3) {

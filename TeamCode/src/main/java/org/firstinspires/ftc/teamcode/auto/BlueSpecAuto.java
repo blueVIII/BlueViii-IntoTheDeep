@@ -6,7 +6,9 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.TurnConstraints;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 
@@ -43,8 +45,10 @@ public class BlueSpecAuto extends LinearOpMode {
 
 
         Action liftToHighJunction = lift.moveLiftAction(3000, 0.8);
+        Action liftToHighJunction2 = lift.moveLiftAction(3000, 0.8);
         Action liftToLowPosition  = lift.moveLiftAction( 1500, 0.8);
         Action liftDown = lift.moveLiftAction(0, 0.8);
+        Action openTopClaw2 = servos.moveTopClaw(0.0);
 
         Action slideIn  = slide.slideMoveAction( 109,  0.7);
         Action slideOut = slide.slideMoveAction(-1250, 0.7);
@@ -52,17 +56,24 @@ public class BlueSpecAuto extends LinearOpMode {
         Action openBottomClaw  = servos.moveBottomClaw(0.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
         Action closeTopClaw = servos.moveTopClaw(1.0);
+        Action closeTopClaw2 = servos.moveTopClaw(1.0);
+
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0); // for specimen
-        Action rotateTClaw = servos.moveRotateTClaw(1); // for specimen
-;
+        Action flipTClawOut = servos.moveFlipTClaw(0.1); // for specimen
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.1); // for specimen
+
+        Action flipTClawIn = servos.moveFlipTClaw(0);
+        Action rotateTClaw = servos.moveRotateTClaw(0.85); // for specimen
+        Action rotateTClaw2 = servos.moveRotateTClaw(0.85); // for specimen
+
+        ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-12 + halfWidth, -36 + halfLength))
+                .strafeTo(new Vector2d(-12 + halfWidth, -45 + halfLength))
                 .waitSeconds(0.01);
 
-        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -36 + halfLength,Math.toRadians(90)))
-                .lineToY(-42.5 + halfLength, null, new ProfileAccelConstraint(-80, 80))
+        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -45 + halfLength,Math.toRadians(90)))
+                .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
                 .setTangent(Math.toRadians(90))
                 .lineToY(-22 + halfLength, null, new ProfileAccelConstraint(-80, 80))
@@ -72,10 +83,25 @@ public class BlueSpecAuto extends LinearOpMode {
                 .lineToY(-22 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(63, -22 + halfLength), null, new ProfileAccelConstraint(-80, 80))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-52)
-                .strafeTo(new Vector2d(64,-35), null, new ProfileAccelConstraint(-80, 80))
+                .lineToY(-52, null, new ProfileAccelConstraint(-80, 80))
+                .lineToY(-35, null, new ProfileAccelConstraint(-80, 80))
+                .strafeTo(new Vector2d(51,-35), null, new ProfileAccelConstraint(-80, 80))
+               /* .turnTo(Math.toRadians(160), new TurnConstraints(Math.toRadians(90), Math.toRadians(60), Math.toRadians(60)))
+                .strafeTo(new Vector2d(52, -35), null, new ProfileAccelConstraint(-80, 80))
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(52, -75 + halfLength, Math.toRadians(260)),Math.toRadians(260), null, new ProfileAccelConstraint(-80, 80))
+                .lineToY(-55 + halfLength) */
+                //.strafeTo(new Vector2d(52, -72 + halfLength), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(51, -55 + halfLength, Math.toRadians(235)),Math.toRadians(235), null, new ProfileAccelConstraint(-80, 80))
+                ;
+
+
+        TrajectoryActionBuilder drive3 = drive.actionBuilder(new Pose2d(51, -55 + halfLength, Math.toRadians(270)))
+                .lineToY(-60)
+                ;
+
+        TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -60, Math.toRadians(270)))
+                .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-12 + halfWidth, -45 + halfLength, Math.toRadians(100)), Math.toRadians(90), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
@@ -158,6 +184,9 @@ public class BlueSpecAuto extends LinearOpMode {
          */
         Action trajectoryAction1 = drive1.build();
         Action trajectoryAction2 = drive2.build();
+        Action trajectoryAction3 = drive3.build();
+        Action sleep = new SleepAction(0.3);
+        Action trajectoryAction4 = drive4.build();
 
         Actions.runBlocking(closeTopClaw);
 
@@ -175,11 +204,21 @@ public class BlueSpecAuto extends LinearOpMode {
                             closeTopClaw,
                             liftToHighJunction,
                             flipTClawOut,
+                            rotateTClaw,
                             trajectoryAction1,
                             liftToLowPosition,
                             openTopClaw,
                             liftDown,
-                            trajectoryAction2
+                            flipTClawIn,
+                            trajectoryAction2,
+                            flipTClawOut2,
+                            openTopClaw2,
+                            rotateTClaw2,
+                            trajectoryAction3,
+                            closeTopClaw2,
+                            sleep,
+                            liftToHighJunction2,
+                            trajectoryAction4
                     )
             );
             telemetry.addData("Autonomous", "Complete");
