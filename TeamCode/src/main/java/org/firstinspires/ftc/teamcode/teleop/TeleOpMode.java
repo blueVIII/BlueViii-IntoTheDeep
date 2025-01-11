@@ -196,7 +196,7 @@ public class TeleOpMode extends OpMode
             hangTimeStart = System.nanoTime();
         }
 
-        while (System.nanoTime() - hangTimeStart < 300000000) {
+        while (System.nanoTime() - hangTimeStart < 1000000000) {
             liftMotor1.setPower(-0.8);
             liftMotor2.setPower(-0.8);
         }
@@ -234,7 +234,7 @@ public class TeleOpMode extends OpMode
         }
 
         if (gamepad2.left_bumper) {
-            flipTClaw.setPosition(0.96); // flip the top claw into the robot
+            flipTClaw.setPosition(1.0); // flip the top claw into the robot NEW
             rotateTClaw.setPosition(0.7); // rotate top claw to be vertical
             topClaw.setPosition(0.45); // open top claw
         }
@@ -280,8 +280,8 @@ public class TeleOpMode extends OpMode
         if (gamepad2.left_trigger > 0.2) {
             // top claw rotate, top claw open
             topClaw.setPosition(0.4); // open top claw
-            flipTClaw.setPosition(0.12); // flip to align
-            rotateTClaw.setPosition(0.87); // 0 is going up, 1 is going down
+            flipTClaw.setPosition(0.04); // flip to align
+            rotateTClaw.setPosition(0.7); // 0 is going up, 1 is going down
         }
 
         if (gamepad2.right_trigger > 0.3) {

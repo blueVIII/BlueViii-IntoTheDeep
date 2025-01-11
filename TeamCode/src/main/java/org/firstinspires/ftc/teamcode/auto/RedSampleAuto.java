@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.Trajectory;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -16,8 +15,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 @Config
-@Autonomous(name="Blue Sample Auto", group = "Autonomous")
-public class BlueSampleAuto extends LinearOpMode {
+@Autonomous(name="Red Sample Auto", group = "Autonomous")
+public class RedSampleAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,12 +28,12 @@ public class BlueSampleAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         // mechanism initialization
-        Lift lift3 = new Lift(hardwareMap, telemetry);
-        lift3.Init();
-        SlideIntake slideIntake1 = new SlideIntake(hardwareMap, telemetry);
-        slideIntake1.Init();
+        Lift lift4 = new Lift(hardwareMap, telemetry);
+        lift4.Init();
+        SlideIntake slideIntake2 = new SlideIntake(hardwareMap, telemetry);
+        slideIntake2.Init();
         RobotServos servos   = new RobotServos(hardwareMap);
-        double slideIntakeStartPos = slideIntake1.GetPosition();
+        double slideIntakeStartPos = slideIntake2.GetPosition();
 
         TrajectoryActionBuilder initialDrive = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(53 - halfWidth, 63 - halfLength), null, new ProfileAccelConstraint(-80, 80))
@@ -52,8 +51,8 @@ public class BlueSampleAuto extends LinearOpMode {
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBack = driveBack.build();
-        Action liftToHighBox = lift3.moveLiftAction(4800, 0.8);
-        Action liftDown = lift3.moveLiftAction(0, 0.8);
+        Action liftToHighBox = lift4.moveLiftAction(4800, 0.8);
+        Action liftDown = lift4.moveLiftAction(0, 0.8);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
@@ -62,8 +61,8 @@ public class BlueSampleAuto extends LinearOpMode {
         Action openBottomClaw = servos.moveBottomClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
         Action rotateArmIn    = servos.moveRotateArm(0.0);
-        //Action slideIntakeOut = slideIntake2.slideMoveAction(-1079, 0.7);
-        //Action slideInTakeIn = slideIntake2.slideMoveAction((int)slideIntakeStartPos, 0.7);
+        Action slideIntakeOut = slideIntake2.slideMoveAction(-1079, 0.7);
+        Action slideInTakeIn = slideIntake2.slideMoveAction((int)slideIntakeStartPos, 0.7);
 
         Actions.runBlocking(closeTopClaw);
 
@@ -74,7 +73,6 @@ public class BlueSampleAuto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            lift3.Init();
             telemetry.addData("Autonomous", "Started");
 
             Actions.runBlocking(
