@@ -49,6 +49,7 @@ public class TeleOpMode extends OpMode
     private int slideIntakeEndPosition;
 
     private long bumperPressTime = 0;
+    private long hangTimeStart = 0;
 
     private Servo rotateArm = null;
     private Servo bottomClaw = null;
@@ -189,6 +190,15 @@ public class TeleOpMode extends OpMode
             bottomClaw.setPosition(0.2); // open bottom claw
         } else if (gamepad1.a) {
             bottomClaw.setPosition(1); // close bottom claw
+        }
+
+        if (gamepad1.right_trigger > 0.5) {
+            hangTimeStart = System.nanoTime();
+        }
+
+        while (System.nanoTime() - hangTimeStart < 300000000) {
+            liftMotor1.setPower(-0.8);
+            liftMotor2.setPower(-0.8);
         }
 
         // Co-Driver Top claw

@@ -47,8 +47,11 @@ public class BlueSpecAuto extends LinearOpMode {
         Action liftToHighJunction = lift.moveLiftAction(3000, 0.8);
         Action liftToHighJunction2 = lift.moveLiftAction(3000, 0.8);
         Action liftToLowPosition  = lift.moveLiftAction( 1500, 0.8);
+        Action liftToLowPosition2  = lift.moveLiftAction( 1500, 0.8);
         Action liftDown = lift.moveLiftAction(0, 0.8);
+        Action liftDown2 = lift.moveLiftAction(0, 0.8);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
+        Action openTopClaw3 = servos.moveTopClaw(0.0);
 
         Action slideIn  = slide.slideMoveAction( 109,  0.7);
         Action slideOut = slide.slideMoveAction(-1250, 0.7);
@@ -69,10 +72,10 @@ public class BlueSpecAuto extends LinearOpMode {
 
         ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-12 + halfWidth, -45 + halfLength))
+                .strafeTo(new Vector2d(-12 + halfWidth, -44 + halfLength))
                 .waitSeconds(0.01);
 
-        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -45 + halfLength,Math.toRadians(90)))
+        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -44 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
                 .setTangent(Math.toRadians(90))
@@ -96,12 +99,12 @@ public class BlueSpecAuto extends LinearOpMode {
 
 
         TrajectoryActionBuilder drive3 = drive.actionBuilder(new Pose2d(51, -55 + halfLength, Math.toRadians(270)))
-                .lineToY(-60)
+                .lineToY(-61)
                 ;
 
-        TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -60, Math.toRadians(270)))
+        TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-12 + halfWidth, -45 + halfLength, Math.toRadians(100)), Math.toRadians(90), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-5 + halfWidth, -41.5 + halfLength, Math.toRadians(100)), Math.toRadians(90), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
@@ -218,7 +221,9 @@ public class BlueSpecAuto extends LinearOpMode {
                             closeTopClaw2,
                             sleep,
                             liftToHighJunction2,
-                            trajectoryAction4
+                            trajectoryAction4,
+                            liftToLowPosition2,
+                            openTopClaw3
                     )
             );
             telemetry.addData("Autonomous", "Complete");
