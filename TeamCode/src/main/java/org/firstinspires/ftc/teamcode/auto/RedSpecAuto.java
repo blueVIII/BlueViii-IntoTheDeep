@@ -44,14 +44,14 @@ public class RedSpecAuto extends LinearOpMode {
         int liftMotor1EndPosition = liftMotor1StartPosition + 4650; */
 
 
-        Action liftToHighJunction = lift2.moveLiftAction(3000, 0.8);
-        Action liftToHighJunction2 = lift2.moveLiftAction(3000, 0.8);
-        Action liftToLowPosition  = lift2.moveLiftAction( 1800, 0.8);
-        Action liftDown = lift2.moveLiftAction(0, 0.8);
+        Action liftToHighJunction = lift2.liftUp(3000, 0.8);
+        Action liftToHighJunction2 = lift2.liftUp(3000, 0.8);
+        Action liftToLowPosition  = lift2.liftDown( 1800, 0.8);
+        Action liftDown = lift2.liftDown(0, 0.8);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
 
 
-        Action liftToLowPosition2  = lift2.moveLiftAction( 1500, 0.8);
+        Action liftToLowPosition2  = lift2.liftDown( 1500, 0.8);
         Action slideIn  = slide.slideMoveAction( 109,  0.7);
         Action slideOut = slide.slideMoveAction(-1250, 0.7);
 

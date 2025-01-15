@@ -119,10 +119,15 @@ public class TeleOpMode extends OpMode
     // Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
-        liftMotor1StartPosition = liftMotor1.getCurrentPosition();
+        if (liftMotor1.getCurrentPosition() > 0) {
+            liftMotor1StartPosition = 0;
+        } else {
+            liftMotor1StartPosition = liftMotor1.getCurrentPosition();
+        }
         liftMotor1EndPosition = liftMotor1StartPosition + 4650;
 
         telemetry.addData("lift1 Start Position", liftMotor1StartPosition);
+        telemetry.addData("lift1 current Position", liftMotor1.getCurrentPosition());
     }
 
     // Code to run ONCE when the driver hits PLAY

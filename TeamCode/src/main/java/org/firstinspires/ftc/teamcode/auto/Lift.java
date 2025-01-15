@@ -32,7 +32,7 @@ public class Lift {
         int liftMotor1EndPosition;
     }
 
-    private void moveLiftToPosition(int targetPosition, double power) {
+    private boolean moveLiftToPosition(int targetPosition, double power) {
         liftMotor1.setTargetPosition(targetPosition);
         liftMotor2.setTargetPosition(targetPosition);
 
@@ -52,19 +52,45 @@ public class Lift {
         liftMotor2.setPower(0);
         liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        return false;
     }
 
-    public Action moveLiftAction(int targetPosition, double power) {
+    public Action liftUp(int targetPosition, double power) {
         return new Action() {
             private boolean initialized = false;
 
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 if (!initialized) {
-                    moveLiftToPosition(targetPosition, power);
+
                     initialized = true;
                 }
-                return false;
+                moveLiftToPosition(targetPosition, power);
+                if (liftMotor1.getCurrentPosition() >= targetPosition - 5) {
+                    return false;
+                }
+                return true;
+            }
+        };
+    }
+
+    public Action liftDown(int targetPosition, double power) {
+        return new Action() {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+
+                    initialized = true;
+                }
+                moveLiftToPosition(targetPosition, power);
+                packet.put("Lift Down Position", liftMotor1.getCurrentPosition());
+                if (liftMotor1.getCurrentPosition() <= targetPosition + 5) {
+                    return false;
+                }
+                return true;
             }
         };
     }

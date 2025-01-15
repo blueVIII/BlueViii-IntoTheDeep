@@ -52,8 +52,8 @@ public class BlueSampleAuto extends LinearOpMode {
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBack = driveBack.build();
-        Action liftToHighBox = lift3.moveLiftAction(4800, 0.8);
-        Action liftDown = lift3.moveLiftAction(0, 0.8);
+        Action liftToHighBox = lift3.liftUp(4800, 0.8);
+        Action liftDown = lift3.liftDown(0, 0.8);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
