@@ -32,10 +32,8 @@ public class RedSpecAuto extends LinearOpMode {
         Pose2d initialPose = new Pose2d(-24 + halfWidth, 72 - halfLength, Math.toRadians(270));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
-        Lift lift2            = new Lift(hardwareMap, telemetry);
-        lift2.Init();
-        SlideIntake slide    = new SlideIntake(hardwareMap, telemetry);
-        slide.Init();
+        Lift lift2            = new Lift(hardwareMap);
+        SlideIntake slide    = new SlideIntake(hardwareMap);
         RobotServos servos   = new RobotServos(hardwareMap);
         Servo rotateArm    = hardwareMap.get(Servo.class, "rotateArm");
 
@@ -44,17 +42,14 @@ public class RedSpecAuto extends LinearOpMode {
         int liftMotor1EndPosition = liftMotor1StartPosition + 4650; */
 
 
-        Action liftToHighJunction = lift2.liftUp(3000, 0.8);
-        Action liftToHighJunction2 = lift2.liftUp(3000, 0.8);
-        Action liftToLowPosition  = lift2.liftDown( 1800, 0.8);
-        Action liftDown = lift2.liftDown(0, 0.8);
+        Action liftToHighJunction = lift2.liftUp(3000);
+        Action liftToHighJunction2 = lift2.liftUp(3000);
+        Action liftToLowPosition  = lift2.liftDown( 1800);
+        Action liftDown = lift2.liftDown(0);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
 
 
-        Action liftToLowPosition2  = lift2.liftDown( 1500, 0.8);
-        Action slideIn  = slide.slideMoveAction( 109,  0.7);
-        Action slideOut = slide.slideMoveAction(-1250, 0.7);
-
+        Action liftToLowPosition2  = lift2.liftDown( 1500);
         Action openBottomClaw  = servos.moveBottomClaw(0.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
         Action closeTopClaw = servos.moveTopClaw(1.0);
@@ -63,13 +58,13 @@ public class RedSpecAuto extends LinearOpMode {
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action openTopClaw3 = servos.moveTopClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.04); // for specimen
-        Action flipTClawOut2 = servos.moveFlipTClaw(0.04); // for specimen
-        Action flipTClawOut3 = servos.moveFlipTClaw(0); // for specimen
+        Action flipTClawOut = servos.moveFlipTClaw(0.15); // for specimen
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.15); // for specimen
+        Action flipTClawOut3 = servos.moveFlipTClaw(0.15); // for specimen
 
         Action flipTClawIn = servos.moveFlipTClaw(1.0);
-        Action rotateTClaw = servos.moveRotateTClaw(0.8); // for specimen
-        Action rotateTClaw2 = servos.moveRotateTClaw(0.8); // for specimen
+        Action rotateTClaw = servos.moveRotateTClaw(0.9); // for specimen
+        Action rotateTClaw2 = servos.moveRotateTClaw(0.9); // for specimen
 
         ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)

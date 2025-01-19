@@ -126,7 +126,7 @@ public class TeleOpMode extends OpMode
         }
         liftMotor1EndPosition = liftMotor1StartPosition + 4650;
 
-        telemetry.addData("lift1 Start Position", liftMotor1StartPosition);
+        telemetry.addData("init-lift-start", liftMotor1StartPosition);
         telemetry.addData("lift1 current Position", liftMotor1.getCurrentPosition());
     }
 
@@ -155,6 +155,18 @@ public class TeleOpMode extends OpMode
         rearLeftPower = (pivot+y-x);
         frontRightPower = (-pivot+y-x);
         rearRightPower = (-pivot+y+x);
+
+        if (gamepad1.dpad_down) {
+            liftMotor1.setPower(-0.4);
+            liftMotor2.setPower(-0.4);
+        }
+
+        if (gamepad1.dpad_left) {
+            liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         // Driver control robot movements
         if(gamepad1.left_bumper) {
@@ -185,10 +197,13 @@ public class TeleOpMode extends OpMode
             liftMotor1.setPower(0.05);
             liftMotor2.setPower(0.05);
         }
-        telemetry.addData("lift", liftMotor2.getCurrentPosition());
-        telemetry.addData("lift", liftMotor2.getPower());
+        telemetry.addData("tele-lift-pos", liftMotor1.getCurrentPosition());
+        telemetry.addData("tele-lift-power", liftMotor1.getPower());
+        telemetry.addData("tele-lift-start", liftMotor1StartPosition);
+        telemetry.addData("tele-lift-end", liftMotor1EndPosition);
 
-        telemetry.addData("horizontal slide", slideIntake.getCurrentPosition());
+
+        telemetry.addData("tele-hslide-pos", slideIntake.getCurrentPosition());
 
         // Driver - Bottom claw
         if (gamepad1.b) {
@@ -239,8 +254,8 @@ public class TeleOpMode extends OpMode
         }
 
         if (gamepad2.left_bumper) {
-            flipTClaw.setPosition(1.0); // flip the top claw into the robot NEW
-            rotateTClaw.setPosition(0.7); // rotate top claw to be vertical
+            flipTClaw.setPosition(0.95); // flip the top claw into the robot NEW
+            rotateTClaw.setPosition(0.65); // rotate top claw to be vertical
             topClaw.setPosition(0.45); // open top claw
         }
 
@@ -285,8 +300,8 @@ public class TeleOpMode extends OpMode
         if (gamepad2.left_trigger > 0.2) {
             // top claw rotate, top claw open
             topClaw.setPosition(0.4); // open top claw
-            flipTClaw.setPosition(0.04); // flip to align
-            rotateTClaw.setPosition(0.7); // 0 is going up, 1 is going down
+            flipTClaw.setPosition(0.15); // flip to align
+            rotateTClaw.setPosition(0.9); // 0 is going up, 1 is going down
         }
 
         if (gamepad2.right_trigger > 0.3) {

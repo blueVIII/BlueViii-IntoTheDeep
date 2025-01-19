@@ -29,12 +29,9 @@ public class BlueSampleAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         // mechanism initialization
-        Lift lift3 = new Lift(hardwareMap, telemetry);
-        lift3.Init();
-        SlideIntake slideIntake1 = new SlideIntake(hardwareMap, telemetry);
-        slideIntake1.Init();
+        Lift lift3 = new Lift(hardwareMap);
+        SlideIntake slideIntake1 = new SlideIntake(hardwareMap);
         RobotServos servos   = new RobotServos(hardwareMap);
-        double slideIntakeStartPos = slideIntake1.GetPosition();
 
         TrajectoryActionBuilder initialDrive = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(53 - halfWidth, 63 - halfLength), null, new ProfileAccelConstraint(-80, 80))
@@ -52,8 +49,8 @@ public class BlueSampleAuto extends LinearOpMode {
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBack = driveBack.build();
-        Action liftToHighBox = lift3.liftUp(4800, 0.8);
-        Action liftDown = lift3.liftDown(0, 0.8);
+        Action liftToHighBox = lift3.liftUp(4800);
+        Action liftDown = lift3.liftDown(0);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
@@ -74,7 +71,6 @@ public class BlueSampleAuto extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            lift3.Init();
             telemetry.addData("Autonomous", "Started");
 
             Actions.runBlocking(

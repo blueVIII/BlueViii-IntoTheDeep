@@ -28,12 +28,9 @@ public class RedSampleAuto extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
 
         // mechanism initialization
-        Lift lift4 = new Lift(hardwareMap, telemetry);
-        lift4.Init();
-        SlideIntake slideIntake2 = new SlideIntake(hardwareMap, telemetry);
-        slideIntake2.Init();
+        Lift lift4 = new Lift(hardwareMap);
+        SlideIntake slideIntake2 = new SlideIntake(hardwareMap);
         RobotServos servos   = new RobotServos(hardwareMap);
-        double slideIntakeStartPos = slideIntake2.GetPosition();
 
         TrajectoryActionBuilder initialDrive = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(53 - halfWidth, 63 - halfLength), null, new ProfileAccelConstraint(-80, 80))
@@ -51,8 +48,8 @@ public class RedSampleAuto extends LinearOpMode {
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBack = driveBack.build();
-        Action liftToHighBox = lift4.liftUp(4800, 0.8);
-        Action liftDown = lift4.liftDown(0, 0.8);
+        Action liftToHighBox = lift4.liftUp(4800);
+        Action liftDown = lift4.liftDown(0);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
@@ -61,8 +58,6 @@ public class RedSampleAuto extends LinearOpMode {
         Action openBottomClaw = servos.moveBottomClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
         Action rotateArmIn    = servos.moveRotateArm(0.0);
-        Action slideIntakeOut = slideIntake2.slideMoveAction(-1079, 0.7);
-        Action slideInTakeIn = slideIntake2.slideMoveAction((int)slideIntakeStartPos, 0.7);
 
         Actions.runBlocking(closeTopClaw);
 

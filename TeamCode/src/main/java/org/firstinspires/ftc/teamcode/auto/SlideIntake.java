@@ -12,53 +12,77 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SlideIntake {
-    private DcMotorEx slideMotor;
-    private Telemetry telemetry;
+    private DcMotorEx slideMotor = null;
 
-    public SlideIntake(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
-        slideMotor = hardwareMap.get(DcMotorEx.class, "slideIntake");
-        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    private void moveToPosition(int targetPosition, double power) {
-        slideMotor.setTargetPosition(targetPosition);
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setPower(power);
-
-        while (slideMotor.isBusy()) {
-            this.telemetry.addData("SlideIntake Position", slideMotor.getCurrentPosition());
-            this.telemetry.update();
+    public class SlideOut implements Action{
+        private boolean initialized = false;
+        private double targetPosition = 0.0;
+        public SlideOut (double targetPosition) {
+            this.targetPosition = targetPosition;
         }
 
-        slideMotor.setPower(0);
-        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            telemetryPacket.put("Entering Slide out", targetPosition);
+            // powers on motor, if it is not on
+            if (!initialized) {
+                slideMotor.setPower(-0.6);
+                initialized = true;
+            }
 
+            double slideMotorPos = slideMotor.getCurrentPosition();
+            telemetryPacket.put("Slide Motor Position ", slideMotorPos);
 
-    public Action slideMoveAction(int targetPosition, double power) {
-        return new Action() {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-                    moveToPosition(targetPosition, power);
-                    initialized = true;
-                }
+            if (slideMotorPos > targetPosition) {
+                return true;
+            } else {
+                slideMotor.setPower(0);
                 return false;
             }
-        };
+        }
     }
 
-    public void Init() {
+    public class SlideIn implements Action{
+        private boolean initialized = false;
+        private double targetPosition = 0.0;
+        public SlideIn (double targetPosition) {
+            this.targetPosition = targetPosition;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            // powers on motor, if it is not on
+            if (!initialized) {
+                slideMotor.setPower(0.6);
+                initialized = true;
+            }
+
+            double slideMotorPos = slideMotor.getCurrentPosition();
+            telemetryPacket.put("Slide Motor Position ", slideMotorPos);
+
+            if (slideMotorPos < targetPosition) {
+                return true;
+            } else {
+                slideMotor.setPower(0);
+                return false;
+            }
+        }
+    }
+
+    public SlideIntake(HardwareMap hardwareMap) {
+        slideMotor = hardwareMap.get(DcMotorEx.class, "slideIntake");
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public double GetPosition() {
-        return slideMotor.getCurrentPosition();
+    public Action slideOut(double targetPosition) {
+        return new SlideOut(targetPosition);
     }
+
+    public Action slideIn(double targetPosition) {
+        return new SlideIn(targetPosition);
+    }
+
 }

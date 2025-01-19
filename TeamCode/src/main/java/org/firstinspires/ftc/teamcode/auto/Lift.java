@@ -9,96 +9,114 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+/**
+ * Lift Class - perform up or down position of the lift.
+ */
 public class Lift {
-    private DcMotorEx liftMotor1, liftMotor2;
-    private Telemetry telemetry = null;
+    private DcMotorEx liftMotor1 = null, liftMotor2 = null;
 
-    public Lift(HardwareMap hardwareMap, Telemetry telemetry) {
-        this.telemetry = telemetry;
+    /**
+     * LiftUp class implements Action to move the lift to specified up position
+     */
+    public class LiftUp implements Action{
+        private boolean initialized = false;
+        private double targetPosition = 0.0;
+        public LiftUp(double targetPosition) {
+            this.targetPosition = targetPosition;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            // powers on motor, if it is not on
+            if (!initialized) {
+                liftMotor1.setPower(0.8);
+                liftMotor2.setPower(0.8);
+                initialized = true;
+            }
+
+            double liftMotor1Pos = liftMotor1.getCurrentPosition();
+            double liftMotor2Pos = liftMotor2.getCurrentPosition();
+            telemetryPacket.put("LiftUp Motor1 Position ", liftMotor1Pos);
+            telemetryPacket.put("LiftUp Motor2 Position ", liftMotor2Pos);
+
+            if (liftMotor1Pos < targetPosition || liftMotor2Pos < targetPosition) {
+                return true;
+            } else {
+                liftMotor1.setPower(0);
+                liftMotor2.setPower(0);
+                return false;
+            }
+        }
+    }
+
+    /**
+     * LitDown class implements Action to run the lift to specified down position
+     */
+    public class LiftDown implements Action {
+        private boolean initialized = false;
+        private double targetPosition = 0.0;
+
+        public LiftDown(double targetPosition) {
+            this.targetPosition = targetPosition;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized) {
+                liftMotor1.setPower(-0.8);
+                liftMotor2.setPower(-0.8);
+                initialized = true;
+            }
+
+            double liftMotor1Pos = liftMotor1.getCurrentPosition();
+            double liftMotor2Pos = liftMotor2.getCurrentPosition();
+            telemetryPacket.put("LiftDown Motor1 Position ", liftMotor1Pos);
+            telemetryPacket.put("LiftDown Motor2 Position ", liftMotor2Pos);
+
+            if (liftMotor1Pos > targetPosition || liftMotor2Pos > targetPosition) {
+                return true;
+            } else {
+                liftMotor1.setPower(0);
+                liftMotor2.setPower(0);
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Lift Constructor
+     * @param hardwareMap
+     */
+    public Lift(HardwareMap hardwareMap) {
         liftMotor1 = hardwareMap.get(DcMotorEx.class, "liftMotor1");
         liftMotor2 = hardwareMap.get(DcMotorEx.class, "liftMotor2");
 
         liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
         liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
         liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int liftMotor1StartPosition;
-        int liftMotor1EndPosition;
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    private boolean moveLiftToPosition(int targetPosition, double power) {
-        liftMotor1.setTargetPosition(targetPosition);
-        liftMotor2.setTargetPosition(targetPosition);
-
-        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        liftMotor1.setPower(power);
-        liftMotor2.setPower(power);
-
-        while (liftMotor1.isBusy() && liftMotor2.isBusy()) {
-            this.telemetry.addData("LiftMotor1 Position", liftMotor1.getCurrentPosition());
-            this.telemetry.addData("LiftMotor2 Position", liftMotor2.getCurrentPosition());
-            this.telemetry.update();
-        }
-
-        liftMotor1.setPower(0);
-        liftMotor2.setPower(0);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        return false;
+    /**
+     * Create a new LiftUp Action
+     * @param targetPosition
+     * @return
+     */
+    public Action liftUp(double targetPosition) {
+        return new LiftUp(targetPosition);
     }
 
-    public Action liftUp(int targetPosition, double power) {
-        return new Action() {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-
-                    initialized = true;
-                }
-                moveLiftToPosition(targetPosition, power);
-                if (liftMotor1.getCurrentPosition() >= targetPosition - 5) {
-                    return false;
-                }
-                return true;
-            }
-        };
-    }
-
-    public Action liftDown(int targetPosition, double power) {
-        return new Action() {
-            private boolean initialized = false;
-
-            @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-                if (!initialized) {
-
-                    initialized = true;
-                }
-                moveLiftToPosition(targetPosition, power);
-                packet.put("Lift Down Position", liftMotor1.getCurrentPosition());
-                if (liftMotor1.getCurrentPosition() <= targetPosition + 5) {
-                    return false;
-                }
-                return true;
-            }
-        };
-    }
-
-    public void Init() {
-        liftMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    /**
+     * Create a new LiftDown Action
+     * @param targetPosition
+     * @return
+     */
+    public Action liftDown(double targetPosition) {
+        return new LiftDown(targetPosition);
     }
 }
