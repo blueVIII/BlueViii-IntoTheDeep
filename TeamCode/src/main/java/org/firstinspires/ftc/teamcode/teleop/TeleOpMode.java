@@ -287,7 +287,7 @@ public class TeleOpMode extends OpMode
             rotateBClaw.setPosition(0.70); // rotate bottom claw to OG position
             bottomClaw.setPosition(1); // close bottom claw
             rotateArm.setPosition(0); // rotate bottom claw arm back in
-            if (slideIntakePosition < (slideIntakeStartPosition - 85))  {
+            if (slideIntakePosition < (slideIntakeStartPosition - 130))  {
                 slideIntake.setPower(0.7); // slide in
             }
         }
@@ -300,8 +300,8 @@ public class TeleOpMode extends OpMode
         if (gamepad2.left_trigger > 0.2) {
             // top claw rotate, top claw open
             topClaw.setPosition(0.4); // open top claw
-            flipTClaw.setPosition(0.15); // flip to align
-            rotateTClaw.setPosition(0.9); // 0 is going up, 1 is going down
+            flipTClaw.setPosition(0.19); // flip to align
+            rotateTClaw.setPosition(0.93); // 0 is going up, 1 is going down
         }
 
         if (gamepad2.right_trigger > 0.3) {
