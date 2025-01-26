@@ -47,11 +47,12 @@ public class BlueSpecAuto extends LinearOpMode {
         Action liftToHighJunction = lift.liftUp(3000);
         Action liftToHighJunction2 = lift.liftUp(3000);
         Action liftToHighJunction3 = lift.liftUp(3000);
-        Action liftToLowPosition  = lift.liftDown( 1800);
-        Action liftToLowPosition2  = lift.liftDown( 1800);
-        Action liftToLowPosition3  = lift.liftDown( 1800);
+        Action liftToLowPosition  = lift.liftDown( 1700);
+        Action liftToLowPosition2  = lift.liftDown( 1700);
+        Action liftToLowPosition3  = lift.liftDown( 1700);
         Action liftDown = lift.liftDown(0);
         Action liftDown2 = lift.liftDown(0);
+        Action liftDown3 = lift.liftDown(0);
         Action openTopClaw2 = servos.moveTopClaw(0.3);
         Action openTopClaw3 = servos.moveTopClaw(0.3);
         Action flipTClawOut3 = servos.moveFlipTClaw(0); // for specimen
@@ -87,17 +88,12 @@ public class BlueSpecAuto extends LinearOpMode {
 
         ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-15 + halfWidth, -46 + halfLength));
+                .strafeTo(new Vector2d(-15 + halfWidth, -45 + halfLength));
 
-        TrajectoryActionBuilder driveIn = drive.actionBuilder(new Pose2d(-12 + halfWidth, -46 + halfLength, Math.toRadians(90)))
-                .lineToY(-41 + halfLength, null, new ProfileAccelConstraint(-80, 80))
-                ;
-
-
-        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -41 + halfLength,Math.toRadians(90)))
+        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-7 + halfWidth, -44.5 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(51, -55 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
+                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
                 ;
 
         /*TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-12 + halfWidth, -44.5 + halfLength,Math.toRadians(90)))
@@ -119,16 +115,16 @@ public class BlueSpecAuto extends LinearOpMode {
                 ; */
 
 
-        TrajectoryActionBuilder drive3 = drive.actionBuilder(new Pose2d(51, -55 + halfLength, Math.toRadians(270)))
+        TrajectoryActionBuilder drive3 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
                 .lineToY(-61,null, new ProfileAccelConstraint(-20, 20))
                 ;
 
         TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-7 + halfWidth, -46 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-7 + halfWidth, -44.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
-        TrajectoryActionBuilder drive5 = drive.actionBuilder(new Pose2d(-5 + halfWidth, -46 + halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder drive5 = drive.actionBuilder(new Pose2d(-15 + halfWidth, -45 + halfLength, Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-90, 90))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-90, 90))
                 .setTangent(Math.toRadians(90))
@@ -141,26 +137,30 @@ public class BlueSpecAuto extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-52) */
                 .strafeTo(new Vector2d(51,-35), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(51, -55 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
+                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
                 ;
 
-        TrajectoryActionBuilder drive6 = drive.actionBuilder(new Pose2d(51, -55 + halfLength, Math.toRadians(270)))
+        TrajectoryActionBuilder drive6 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
                 .lineToY(-60,null, new ProfileAccelConstraint(-20, 20))
                 ;
-        TrajectoryActionBuilder drive7 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
+        TrajectoryActionBuilder drive7 = drive.actionBuilder(new Pose2d(51, -60, Math.toRadians(270)))
                 .strafeTo(new Vector2d(30, -45), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         TrajectoryActionBuilder drive7half = drive.actionBuilder(new Pose2d(30, -45, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(halfWidth + 2, -44 + halfLength, Math.toRadians(89.9)), Math.toRadians(89.9), null, new ProfileAccelConstraint(-60, 60))
+                .splineToLinearHeading(new Pose2d(halfWidth + 2, -43.5 + halfLength, Math.toRadians(80)), Math.toRadians(80), null, new ProfileAccelConstraint(-60, 60))
         ;
+
+        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(halfWidth + 2, -43.5 + halfLength, Math.toRadians(90)))
+                .lineToY(-45 + halfLength)
+                ;
 
         TrajectoryActionBuilder drive8 = drive.actionBuilder(new Pose2d(halfWidth + 2, -44 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(51, -55 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
+                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
                 ;
-        TrajectoryActionBuilder drive9 = drive.actionBuilder(new Pose2d(51, -55 + halfLength, Math.toRadians(270)))
+        TrajectoryActionBuilder drive9 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
                 .lineToY(-60,null, new ProfileAccelConstraint(-20, 20))
                 ;
 
@@ -199,7 +199,6 @@ public class BlueSpecAuto extends LinearOpMode {
 
 
         Action trajectoryAction1 = drive1.build();
-        Action trajectoryActionDriveIn = driveIn.build();
         Action trajectoryAction2 = drive2.build();
         Action trajectoryAction3 = drive3.build();
         Action sleep = new SleepAction(0.3);
@@ -212,6 +211,7 @@ public class BlueSpecAuto extends LinearOpMode {
         Action trajectoryAction7half = drive7half.build();
         Action trajectoryAction8 = drive8.build();
         Action trajectoryAction9 = drive9.build();
+        Action trajectoryActionBack = driveBack.build();
 
         Actions.runBlocking(closeTopClaw);
 
@@ -233,17 +233,20 @@ public class BlueSpecAuto extends LinearOpMode {
                                 rotateTClaw),
                             new SequentialAction (
                                     liftToLowPosition,
-                                    openTopClaw),
+                                    openTopClaw,
+                                    flipTClawOut3),
                             new ParallelAction (
-                                    flipTClawOut3,
+                                    rotateTClaw2,
                                     liftDown,
-                                    trajectoryAction2),
-                            new ParallelAction (
+                                    trajectoryAction5),
+                            /*new ParallelAction (
                                     flipTClawOut2,
                                     openTopClaw2,
                                     rotateTClaw2,
-                                    trajectoryAction3),
+                                    trajectoryAction3),*/
                             new SequentialAction (
+                                    flipTClawOut5,
+                                    trajectoryAction3,
                                     closeTopClaw2,
                                     sleep),
                             new ParallelAction(
@@ -254,7 +257,7 @@ public class BlueSpecAuto extends LinearOpMode {
                                     openTopClaw3),
                             new ParallelAction(
                                     liftDown2,
-                                    trajectoryAction5,
+                                    trajectoryAction2,
                                     flipTClawOut4,
                                     openTopClaw4,
                                     rotateTClaw3),
@@ -270,7 +273,9 @@ public class BlueSpecAuto extends LinearOpMode {
                             new SequentialAction(
                                     trajectoryAction7half,
                                     liftToLowPosition3,
-                                    openTopClaw5)
+                                    openTopClaw5,
+                                    trajectoryActionBack,
+                                    liftDown3)
                             /*new ParallelAction(
                                     trajectoryAction8,
                                     flipTClawOut5,
