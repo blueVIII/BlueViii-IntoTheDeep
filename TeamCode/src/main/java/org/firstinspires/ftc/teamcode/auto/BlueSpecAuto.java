@@ -90,7 +90,7 @@ public class BlueSpecAuto extends LinearOpMode {
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
                 .strafeTo(new Vector2d(-15 + halfWidth, -45 + halfLength));
 
-        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-7 + halfWidth, -44.5 + halfLength,Math.toRadians(90)))
+        TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-7 + halfWidth, -45.5 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
                 .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
@@ -121,7 +121,7 @@ public class BlueSpecAuto extends LinearOpMode {
 
         TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-7 + halfWidth, -44.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-7 + halfWidth, -45.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         TrajectoryActionBuilder drive5 = drive.actionBuilder(new Pose2d(-15 + halfWidth, -45 + halfLength, Math.toRadians(90)))
@@ -141,17 +141,17 @@ public class BlueSpecAuto extends LinearOpMode {
                 ;
 
         TrajectoryActionBuilder drive6 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
-                .lineToY(-60,null, new ProfileAccelConstraint(-20, 20))
+                .lineToY(-61,null, new ProfileAccelConstraint(-20, 20))
                 ;
-        TrajectoryActionBuilder drive7 = drive.actionBuilder(new Pose2d(51, -60, Math.toRadians(270)))
-                .strafeTo(new Vector2d(30, -45), null, new ProfileAccelConstraint(-80, 80))
+        TrajectoryActionBuilder drive7 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
+                .strafeTo(new Vector2d(30, -46), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
-        TrajectoryActionBuilder drive7half = drive.actionBuilder(new Pose2d(30, -45, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(halfWidth + 2, -43.5 + halfLength, Math.toRadians(80)), Math.toRadians(80), null, new ProfileAccelConstraint(-60, 60))
+        TrajectoryActionBuilder drive7half = drive.actionBuilder(new Pose2d(30, -46, Math.toRadians(270)))
+                .splineToLinearHeading(new Pose2d(halfWidth + 2, -45 + halfLength, Math.toRadians(80)), Math.toRadians(80), null, new ProfileAccelConstraint(-60, 60))
         ;
 
-        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(halfWidth + 2, -43.5 + halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(halfWidth + 2, -45 + halfLength, Math.toRadians(90)))
                 .lineToY(-45 + halfLength)
                 ;
 

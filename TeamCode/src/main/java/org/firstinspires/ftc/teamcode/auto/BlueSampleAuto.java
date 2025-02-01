@@ -43,44 +43,69 @@ public class BlueSampleAuto extends LinearOpMode {
 
         TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(30)))
                 .lineToY(65 - halfLength)
-                .splineToLinearHeading(new Pose2d(57 - halfWidth, 54 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
                 ; //-1170
 
-        TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(57 - halfWidth, 54 - halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(90)))
                 .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
-        TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(25)))
+        /* TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(25)))
                 .lineToY(62 - halfLength)
+                ;  */
+
+        TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(40)))
+                .lineToY(60 - halfLength)
+                .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
+                //.lineToX(63.5 - halfWidth)
                 ; //-1170
+
+        TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(63.5 - halfWidth, 54 - halfLength, Math.toRadians(90)))
+                .strafeTo(new Vector2d(56.5 - halfWidth, 54 - halfLength))
+                .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBucketAction2 = driveToBucket2.build();
+        Action trajectoryBucketAction3 = driveToBucket3.build();
         Action trajectoryBack = driveBack.build();
         Action trajectoryBack2 = driveBack2.build();
         Action liftToHighBox = lift3.liftUp(4800);
         Action liftToHighBox2 = lift3.liftUp(4800);
+        Action liftToHighBox3 = lift3.liftUp(4800);
         Action liftDown = lift3.liftDown(0);
         Action liftDown2 = lift3.liftDown(0);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action flipTClawOut2 = servos.moveFlipTClaw(0.45); // for sample
+        Action flipTClawOut3 = servos.moveFlipTClaw(0.45); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
         Action rotateTClaw2 = servos.moveRotateTClaw(1); // for sample
+        Action rotateTClaw3 = servos.moveRotateTClaw(1); // for sample
         Action closeTopClaw = servos.moveTopClaw(1.0);
         Action closeTopClaw2 = servos.moveTopClaw(1.0);
+        Action closeTopClaw3 = servos.moveTopClaw(1.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
+        Action closeBottomClaw2 = servos.moveBottomClaw(1.0);
         Action openBottomClaw = servos.moveBottomClaw(0.0);
         Action openBottomClaw2 = servos.moveBottomClaw(0.0);
+        Action openBottomClaw3 = servos.moveBottomClaw(0.0);
+        Action openBottomClaw4 = servos.moveBottomClaw(0.0);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
+        Action rotateArmOut2    = servos.moveRotateArm(1.0);
         Action rotateArmIn    = servos.moveRotateArm(0.0);
-        Action slideIntakeOut = slideIntake1.slideOut(-520);
+        Action rotateArmIn2    = servos.moveRotateArm(0.0);
+        Action slideIntakeOut = slideIntake1.slideOut(-400);
+        Action slideIntakeOut2 = slideIntake1.slideOut(-400);
         Action slideIntakeIn = slideIntake1.slideIn(-120);
+        Action slideIntakeIn2 = slideIntake1.slideIn(-120);
         Action rotateBClaw = servos.moveRotateBClaw(0.70);
         Action flipTClawIn = servos.moveFlipTClaw(0.95);
+        Action flipTClawIn2 = servos.moveFlipTClaw(0.95);
         Action rotateTClawIn = servos.moveRotateTClaw(0.65);
+        Action rotateTClawIn2 = servos.moveRotateTClaw(0.65);
         Action openTClaw = servos.moveTopClaw(0.45);
+        Action openTClaw2 = servos.moveTopClaw(0.45);
         //Action slideIntakeOut = slideIntake2.slideMoveAction(-1079, 0.7);
         //Action slideInTakeIn = slideIntake2.slideMoveAction((int)slideIntakeStartPos, 0.7);
 
@@ -135,7 +160,30 @@ public class BlueSampleAuto extends LinearOpMode {
                             openTopClaw2,
                             new SleepAction(0.5),
                             trajectoryBack2,
-                            liftDown2
+                            liftDown2,
+                            slideIntakeOut2,
+                            new SleepAction(1.3),
+                            openBottomClaw3,
+                            rotateArmOut2,
+                            new SleepAction(1.0),
+                            closeBottomClaw2,
+                            new SleepAction(1.0),
+                            slideIntakeIn2,
+                            new SleepAction(1.3),
+                            rotateArmIn2,
+                            new SleepAction(1.0),
+                            openTClaw2,
+                            rotateTClawIn2,
+                            flipTClawIn2,
+                            new SleepAction(1.0),
+                            closeTopClaw3,
+                            new SleepAction(0.5),
+                            openBottomClaw4,
+                            new SleepAction(0.5),
+                            flipTClawOut3,
+                            rotateTClaw3,
+                            liftToHighBox3,
+                            trajectoryBucketAction3
                             /*openBottomClaw,
                             slideIntakeOut,
                             rotateArmOut,

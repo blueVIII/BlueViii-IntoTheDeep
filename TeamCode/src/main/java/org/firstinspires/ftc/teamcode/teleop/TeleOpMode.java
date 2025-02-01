@@ -216,9 +216,14 @@ public class TeleOpMode extends OpMode
             hangTimeStart = System.nanoTime();
         }
 
-        while (System.nanoTime() - hangTimeStart < 1000000000) {
-            liftMotor1.setPower(-0.8);
-            liftMotor2.setPower(-0.8);
+        while (System.nanoTime() - hangTimeStart < 2100000000) {
+            if (System.nanoTime() - hangTimeStart < 1000000000) {
+                liftMotor1.setPower(-0.8);
+                liftMotor2.setPower(-0.8);
+            } else if (System.nanoTime() - hangTimeStart < 2100000000) {
+                liftMotor1.setPower(-0.5);
+                liftMotor2.setPower(-0.5);
+            }
         }
 
         // Co-Driver Top claw
