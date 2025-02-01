@@ -23,7 +23,7 @@ public class BlueSampleAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         double halfWidth = 7.4375;
         double halfLength = 8.125;
-        Pose2d initialPose = new Pose2d(48 - halfWidth, 72 - halfLength, Math.toRadians(270));
+        Pose2d initialPose = new Pose2d(47.8 - halfWidth, 72 - halfLength, Math.toRadians(270));
 
         // Use RR drivetrain
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
@@ -39,43 +39,68 @@ public class BlueSampleAuto extends LinearOpMode {
 
         // building trajectories
         TrajectoryActionBuilder driveToBucket = drive.actionBuilder(new Pose2d(53 - halfWidth, 63 - halfLength, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(66 - halfWidth, 66 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
 
-        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(30)))
-                .lineToY(65 - halfLength)
-                .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
+        TrajectoryActionBuilder driveIntoBucket = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
+                .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveBackUp = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(30)))
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
+                .splineToLinearHeading(new Pose2d(58 - halfWidth, 52 - halfLength, Math.toRadians(76)),  Math.toRadians(76),null, new ProfileAccelConstraint(-80, 80))
                 ; //-1170
 
-        TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(57 - halfWidth, 52 - halfLength, Math.toRadians(90)))
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveIntoBucket2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
                 .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
         /* TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(25)))
                 .lineToY(62 - halfLength)
                 ;  */
 
-        TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(40)))
+        TrajectoryActionBuilder driveBackUp2 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(40)))
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(40)))
                 .lineToY(60 - halfLength)
-                .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 54 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
-                //.lineToX(63.5 - halfWidth)
+                .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 50 - halfLength, Math.toRadians(87)),  Math.toRadians(87),null, new ProfileAccelConstraint(-80, 80))
+                .strafeTo(new Vector2d(70 - halfWidth, 48 - halfLength))
                 ; //-1170
 
-        TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(63.5 - halfWidth, 54 - halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(68 - halfWidth, 50 - halfLength, Math.toRadians(90)))
                 .strafeTo(new Vector2d(56.5 - halfWidth, 54 - halfLength))
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveIntoBucket3 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
                 .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
+
+        TrajectoryActionBuilder driveBack3 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(40)))
+                .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
         // creating actions
         Action trajectoryBucketAction = driveToBucket.build();
         Action trajectoryBucketAction2 = driveToBucket2.build();
         Action trajectoryBucketAction3 = driveToBucket3.build();
+        Action trajectoryBucketIn = driveIntoBucket.build();
+        Action trajectoryBucketIn2 = driveIntoBucket2.build();
+        Action trajectoryBucketIn3 = driveIntoBucket3.build();
         Action trajectoryBack = driveBack.build();
         Action trajectoryBack2 = driveBack2.build();
+        Action trajectoryBack3= driveBack3.build();
+        Action trajectoryBackUp = driveBackUp.build();
+        Action trajectoryBackUp2 = driveBackUp2.build();
         Action liftToHighBox = lift3.liftUp(4800);
         Action liftToHighBox2 = lift3.liftUp(4800);
         Action liftToHighBox3 = lift3.liftUp(4800);
         Action liftDown = lift3.liftDown(0);
         Action liftDown2 = lift3.liftDown(0);
+        Action liftDown3 = lift3.liftDown(0);
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
+        Action openTopClaw3 = servos.moveTopClaw(0.0);
         Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
         Action flipTClawOut2 = servos.moveFlipTClaw(0.45); // for sample
         Action flipTClawOut3 = servos.moveFlipTClaw(0.45); // for sample
@@ -99,6 +124,7 @@ public class BlueSampleAuto extends LinearOpMode {
         Action slideIntakeOut2 = slideIntake1.slideOut(-400);
         Action slideIntakeIn = slideIntake1.slideIn(-120);
         Action slideIntakeIn2 = slideIntake1.slideIn(-120);
+        Action slideIntakeIn3 = slideIntake1.slideIn(0);
         Action rotateBClaw = servos.moveRotateBClaw(0.70);
         Action flipTClawIn = servos.moveFlipTClaw(0.95);
         Action flipTClawIn2 = servos.moveFlipTClaw(0.95);
@@ -122,68 +148,94 @@ public class BlueSampleAuto extends LinearOpMode {
 
             Actions.runBlocking(
                     new SequentialAction(
-                            rotateBClaw,
-                            flipTClawOut,
-                            rotateTClaw,
-                            liftToHighBox,
-                            trajectoryBucketAction,
-                            new SleepAction(0.5),
-                            openTopClaw,
-                            new SleepAction(0.5),
-                            trajectoryBack,
-                            new SleepAction(0.5),
-                            liftDown,
-                            slideIntakeOut,
-                            new SleepAction(1.3),
-                            openBottomClaw,
-                            rotateArmOut,
-                            new SleepAction(1.0),
-                            closeBottomClaw,
-                            new SleepAction(1.0),
-                            slideIntakeIn,
-                            new SleepAction(1.3),
-                            rotateArmIn,
-                            new SleepAction(1.0),
-                            openTClaw,
-                            rotateTClawIn,
-                            flipTClawIn,
-                            new SleepAction(1.0),
-                            closeTopClaw2,
-                            new SleepAction(0.5),
-                            openBottomClaw2,
-                            new SleepAction(0.5),
-                            flipTClawOut2,
-                            rotateTClaw2,
-                            liftToHighBox2,
-                            trajectoryBucketAction2,
-                            new SleepAction(0.5),
-                            openTopClaw2,
-                            new SleepAction(0.5),
-                            trajectoryBack2,
-                            liftDown2,
-                            slideIntakeOut2,
-                            new SleepAction(1.3),
-                            openBottomClaw3,
-                            rotateArmOut2,
-                            new SleepAction(1.0),
-                            closeBottomClaw2,
-                            new SleepAction(1.0),
-                            slideIntakeIn2,
-                            new SleepAction(1.3),
-                            rotateArmIn2,
-                            new SleepAction(1.0),
-                            openTClaw2,
-                            rotateTClawIn2,
-                            flipTClawIn2,
-                            new SleepAction(1.0),
-                            closeTopClaw3,
-                            new SleepAction(0.5),
-                            openBottomClaw4,
-                            new SleepAction(0.5),
-                            flipTClawOut3,
-                            rotateTClaw3,
-                            liftToHighBox3,
-                            trajectoryBucketAction3
+                            new ParallelAction(
+                                    rotateBClaw,
+                                    flipTClawOut,
+                                    rotateTClaw,
+                                    liftToHighBox,
+                                    trajectoryBucketAction
+                            ),
+                            new SequentialAction(
+                                    trajectoryBucketIn,
+                                    openTopClaw,
+                                    new SleepAction(0.5),
+                                    trajectoryBackUp
+                            ),
+                            new ParallelAction(
+                                    trajectoryBack,
+                                    liftDown,
+                                    slideIntakeOut
+                            ),
+                            new SequentialAction(
+                                    openBottomClaw,
+                                    rotateArmOut,
+                                    new SleepAction(1.0),
+                                    closeBottomClaw,
+                                    new SleepAction(0.5),
+                                    slideIntakeIn,
+                                    new SleepAction(0.5),
+                                    rotateArmIn,
+                                    new SleepAction(0.7),
+                                    openTClaw,
+                                    rotateTClawIn,
+                                    flipTClawIn,
+                                    new SleepAction(1.0),
+                                    closeTopClaw2,
+                                    new SleepAction(0.5),
+                                    openBottomClaw2,
+                                    new SleepAction(0.5),
+                                    flipTClawOut2,
+                                    rotateTClaw2
+                            ),
+                            new ParallelAction(
+                                    liftToHighBox2,
+                                    trajectoryBucketAction2
+                            ),
+                            new SequentialAction(
+                                    trajectoryBucketIn2,
+                                    openTopClaw2,
+                                    new SleepAction(0.5),
+                                    trajectoryBackUp2
+                            ),
+                            new ParallelAction(
+                                    trajectoryBack2,
+                                    liftDown2,
+                                    slideIntakeOut2
+                            ),
+                            new SequentialAction(
+                                    openBottomClaw3,
+                                    rotateArmOut2,
+                                    new SleepAction(1.0),
+                                    closeBottomClaw2,
+                                    new SleepAction(0.5),
+                                    slideIntakeIn2,
+                                    new SleepAction(0.5),
+                                    rotateArmIn2,
+                                    new SleepAction(0.7),
+                                    openTClaw2,
+                                    rotateTClawIn2,
+                                    flipTClawIn2,
+                                    new SleepAction(1.0),
+                                    closeTopClaw3,
+                                    new SleepAction(0.5),
+                                    openBottomClaw4,
+                                    new SleepAction(0.5),
+                                    flipTClawOut3,
+                                    rotateTClaw3
+                            ),
+                            new ParallelAction(
+                                    liftToHighBox3,
+                                    trajectoryBucketAction3
+                            ),
+                            new SequentialAction(
+                                    trajectoryBucketIn3,
+                                    openTopClaw3
+                            ),
+                            new SequentialAction(
+                                    trajectoryBack3,
+                                    liftDown3,
+                                    slideIntakeIn3
+                            )
                             /*openBottomClaw,
                             slideIntakeOut,
                             rotateArmOut,
