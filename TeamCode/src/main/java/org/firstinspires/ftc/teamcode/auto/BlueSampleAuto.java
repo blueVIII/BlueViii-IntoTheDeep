@@ -48,7 +48,7 @@ public class BlueSampleAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
 
         TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
-                .splineToLinearHeading(new Pose2d(58 - halfWidth, 52 - halfLength, Math.toRadians(76)),  Math.toRadians(76),null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(58.5 - halfWidth, 50 - halfLength, Math.toRadians(76)),  Math.toRadians(76),null, new ProfileAccelConstraint(-80, 80))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(57 - halfWidth, 52 - halfLength, Math.toRadians(90)))
@@ -67,7 +67,7 @@ public class BlueSampleAuto extends LinearOpMode {
         TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(40)))
                 .lineToY(60 - halfLength)
                 .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 50 - halfLength, Math.toRadians(87)),  Math.toRadians(87),null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(70 - halfWidth, 48 - halfLength))
+                .strafeTo(new Vector2d(71.5 - halfWidth, 45.5 - halfLength))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(68 - halfWidth, 50 - halfLength, Math.toRadians(90)))
