@@ -48,7 +48,7 @@ public class BlueSampleAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
 
         TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
-                .splineToLinearHeading(new Pose2d(58.5 - halfWidth, 50 - halfLength, Math.toRadians(76)),  Math.toRadians(76),null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(58 - halfWidth, 52.5 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(57 - halfWidth, 52 - halfLength, Math.toRadians(90)))
@@ -67,15 +67,15 @@ public class BlueSampleAuto extends LinearOpMode {
         TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(40)))
                 .lineToY(60 - halfLength)
                 .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 50 - halfLength, Math.toRadians(87)),  Math.toRadians(87),null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(71.5 - halfWidth, 45.5 - halfLength))
+                .strafeTo(new Vector2d(71 - halfWidth, 49.5 - halfLength))
                 ; //-1170
 
-        TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(68 - halfWidth, 50 - halfLength, Math.toRadians(90)))
+        TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(73 - halfWidth, 50 - halfLength, Math.toRadians(90)))
                 .strafeTo(new Vector2d(56.5 - halfWidth, 54 - halfLength))
                 .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
         TrajectoryActionBuilder driveIntoBucket3 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
-                .splineToLinearHeading(new Pose2d(67 - halfWidth, 67 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
+                .splineToLinearHeading(new Pose2d(66.5 - halfWidth, 66.5 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
 
         TrajectoryActionBuilder driveBack3 = drive.actionBuilder(new Pose2d(67 - halfWidth, 67 - halfLength, Math.toRadians(40)))
                 .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(40)),Math.toRadians(40), null, new ProfileAccelConstraint(-80, 80));
@@ -101,9 +101,9 @@ public class BlueSampleAuto extends LinearOpMode {
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
         Action openTopClaw3 = servos.moveTopClaw(0.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.45); // for sample
-        Action flipTClawOut2 = servos.moveFlipTClaw(0.45); // for sample
-        Action flipTClawOut3 = servos.moveFlipTClaw(0.45); // for sample
+        Action flipTClawOut = servos.moveFlipTClaw(0.47); // for sample
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.47); // for sample
+        Action flipTClawOut3 = servos.moveFlipTClaw(0.47); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
         Action rotateTClaw2 = servos.moveRotateTClaw(1); // for sample
         Action rotateTClaw3 = servos.moveRotateTClaw(1); // for sample
@@ -125,9 +125,9 @@ public class BlueSampleAuto extends LinearOpMode {
         Action slideIntakeIn = slideIntake1.slideIn(-120);
         Action slideIntakeIn2 = slideIntake1.slideIn(-120);
         Action slideIntakeIn3 = slideIntake1.slideIn(0);
-        Action rotateBClaw = servos.moveRotateBClaw(0.70);
-        Action flipTClawIn = servos.moveFlipTClaw(0.95);
-        Action flipTClawIn2 = servos.moveFlipTClaw(0.95);
+        Action rotateBClaw = servos.moveRotateBClaw(0.37);
+        Action flipTClawIn = servos.moveFlipTClaw(1.0);
+        Action flipTClawIn2 = servos.moveFlipTClaw(1.0);
         Action rotateTClawIn = servos.moveRotateTClaw(0.65);
         Action rotateTClawIn2 = servos.moveRotateTClaw(0.65);
         Action openTClaw = servos.moveTopClaw(0.45);

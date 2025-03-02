@@ -49,7 +49,7 @@ public class BlueSpecAuto extends LinearOpMode {
         Action liftToHighJunction3 = lift.liftUp(3000);
         Action liftToLowPosition  = lift.liftDown( 1700);
         Action liftToLowPosition2  = lift.liftDown( 1700);
-        Action liftToLowPosition3  = lift.liftDown( 1700);
+        Action liftToLowPosition3  = lift.liftDown( 1600);
         Action liftDown = lift.liftDown(0);
         Action liftDown2 = lift.liftDown(0);
         Action liftDown3 = lift.liftDown(0);
@@ -70,21 +70,21 @@ public class BlueSpecAuto extends LinearOpMode {
 
         Action openTopClaw = servos.moveTopClaw(0.3);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.19); // for specimen
-        Action flipTClawOut2 = servos.moveFlipTClaw(0.19); // for specimen
-        Action flipTClawOut5 = servos.moveFlipTClaw(0.19); // for specimen
+        Action flipTClawOut = servos.moveFlipTClaw(0.2); // for specimen
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.2); // for specimen
+        Action flipTClawOut5 = servos.moveFlipTClaw(0.21); // for specimen
         Action flipTClawOutNew = servos.moveFlipTClaw(0.25); // for specimen
 
         Action flipTClawIn = servos.moveFlipTClaw(1.0);
-        Action rotateTClaw = servos.moveRotateTClaw(0.93); // for specimen
-        Action rotateTClaw2 = servos.moveRotateTClaw(0.93); // for specimen
+        Action rotateTClaw = servos.moveRotateTClaw(0.88); // for specimen
+        Action rotateTClaw2 = servos.moveRotateTClaw(0.88); // for specimen
         Action rotateTClawNew = servos.moveRotateTClaw(0.65); // for specimen
 
-        Action flipTClawOut4 = servos.moveFlipTClaw(0.19);
+        Action flipTClawOut4 = servos.moveFlipTClaw(0.21);
         Action openTopClaw4 = servos.moveTopClaw(0.3);
         Action openTopClaw5 = servos.moveTopClaw(0.3);
         Action openTopClaw6 = servos.moveTopClaw(0.3);
-        Action rotateTClaw3 = servos.moveRotateTClaw(0.93);
+        Action rotateTClaw3 = servos.moveRotateTClaw(0.88);
 
         ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
@@ -116,12 +116,12 @@ public class BlueSpecAuto extends LinearOpMode {
 
 
         TrajectoryActionBuilder drive3 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
-                .lineToY(-61,null, new ProfileAccelConstraint(-20, 20))
+                .lineToY(-61,null, new ProfileAccelConstraint(-40, 40))
                 ;
 
         TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-7 + halfWidth, -45.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-8 + halfWidth, -45.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         TrajectoryActionBuilder drive5 = drive.actionBuilder(new Pose2d(-15 + halfWidth, -45 + halfLength, Math.toRadians(90)))
@@ -137,31 +137,31 @@ public class BlueSpecAuto extends LinearOpMode {
                 .setTangent(Math.toRadians(90))
                 .lineToY(-52) */
                 .strafeTo(new Vector2d(51,-35), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
+                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-40, 40))
                 ;
 
         TrajectoryActionBuilder drive6 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
-                .lineToY(-61,null, new ProfileAccelConstraint(-20, 20))
+                .lineToY(-61,null, new ProfileAccelConstraint(-40, 40))
                 ;
         TrajectoryActionBuilder drive7 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(30, -46), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         TrajectoryActionBuilder drive7half = drive.actionBuilder(new Pose2d(30, -46, Math.toRadians(270)))
-                .splineToLinearHeading(new Pose2d(halfWidth + 2, -45 + halfLength, Math.toRadians(80)), Math.toRadians(80), null, new ProfileAccelConstraint(-60, 60))
+                .splineToLinearHeading(new Pose2d(halfWidth + 2, -45.7 + halfLength, Math.toRadians(78)), Math.toRadians(78), null, new ProfileAccelConstraint(-60, 60))
         ;
 
-        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(halfWidth + 2, -45 + halfLength, Math.toRadians(90)))
-                .lineToY(-45 + halfLength)
+        TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(halfWidth + 2, -45.7 + halfLength, Math.toRadians(90)))
+                .lineToY(-47 + halfLength)
                 ;
 
-        TrajectoryActionBuilder drive8 = drive.actionBuilder(new Pose2d(halfWidth + 2, -44 + halfLength,Math.toRadians(90)))
+        TrajectoryActionBuilder drive8 = drive.actionBuilder(new Pose2d(halfWidth + 2, -44.5 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))
                 .strafeTo(new Vector2d(47 - halfWidth, -45.5 + halfLength), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-20, 20))
+                .splineToLinearHeading(new Pose2d(51, -54 + halfLength, Math.toRadians(245)),Math.toRadians(245), null, new ProfileAccelConstraint(-40, 40))
                 ;
         TrajectoryActionBuilder drive9 = drive.actionBuilder(new Pose2d(51, -54 + halfLength, Math.toRadians(270)))
-                .lineToY(-60,null, new ProfileAccelConstraint(-20, 20))
+                .lineToY(-60,null, new ProfileAccelConstraint(-40, 40))
                 ;
 
         /*TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)

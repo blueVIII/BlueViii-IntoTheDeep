@@ -29,8 +29,8 @@ public class Lift {
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             // powers on motor, if it is not on
             if (!initialized) {
-                liftMotor1.setPower(0.9);
-                liftMotor2.setPower(0.9);
+                liftMotor1.setPower(1.0);
+                liftMotor2.setPower(1.0);
                 initialized = true;
             }
 
