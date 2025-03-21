@@ -10,11 +10,6 @@
 
 
 // Custom definitions may go here
-repositories {
-    maven {
-        url = 'https://maven.brott.dev/'
-    }
-}
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
