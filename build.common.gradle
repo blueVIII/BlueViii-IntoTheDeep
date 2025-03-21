@@ -113,5 +113,8 @@ android {
 }
 
 repositories {
+    maven {
+        url = 'https://maven.brott.dev/'
+    }
 }
 
