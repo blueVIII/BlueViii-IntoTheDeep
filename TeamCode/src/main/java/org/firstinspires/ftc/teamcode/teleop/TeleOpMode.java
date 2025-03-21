@@ -94,7 +94,7 @@ public class TeleOpMode extends OpMode
         //SETTINGS FOR MOTORS
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         rearLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.FORWARD);
         rearRight.setDirection(DcMotor.Direction.FORWARD);
 
         liftMotor1.setDirection(DcMotor.Direction.FORWARD);
