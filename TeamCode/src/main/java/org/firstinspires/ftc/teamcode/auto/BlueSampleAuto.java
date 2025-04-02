@@ -68,7 +68,7 @@ public class BlueSampleAuto extends LinearOpMode {
         TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(40)))
                 .lineToY(60 - halfLength)
                 .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 50 - halfLength, Math.toRadians(87)),  Math.toRadians(87),null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(71 - halfWidth, 49.5 - halfLength))
+                .strafeTo(new Vector2d(73 - halfWidth, 47.5 - halfLength))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(73 - halfWidth, 50 - halfLength, Math.toRadians(90)))
@@ -121,8 +121,8 @@ public class BlueSampleAuto extends LinearOpMode {
         Action rotateArmOut2    = servos.moveRotateArm(1.0);
         Action rotateArmIn    = servos.moveRotateArm(0.0);
         Action rotateArmIn2    = servos.moveRotateArm(0.0);
-        Action slideIntakeOut = slideIntake1.slideOut(-400);
-        Action slideIntakeOut2 = slideIntake1.slideOut(-400);
+        Action slideIntakeOut = slideIntake1.slideOut(-450);
+        Action slideIntakeOut2 = slideIntake1.slideOut(-450);
         Action slideIntakeIn = slideIntake1.slideIn(-120);
         Action slideIntakeIn2 = slideIntake1.slideIn(-120);
         Action slideIntakeIn3 = slideIntake1.slideIn(0);

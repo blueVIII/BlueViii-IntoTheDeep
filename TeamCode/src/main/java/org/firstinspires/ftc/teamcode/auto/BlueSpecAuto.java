@@ -49,8 +49,8 @@ public class BlueSpecAuto extends LinearOpMode {
         Action liftToHighJunction2 = lift.liftUp(3000);
         Action liftToHighJunction3 = lift.liftUp(3000);
         Action liftToLowPosition  = lift.liftDown( 1700);
-        Action liftToLowPosition2  = lift.liftDown( 1700);
-        Action liftToLowPosition3  = lift.liftDown( 1600);
+        Action liftToLowPosition2  = lift.liftDown( 1500);
+        Action liftToLowPosition3  = lift.liftDown( 1400);
         Action liftDown = lift.liftDown(0);
         Action liftDown2 = lift.liftDown(0);
         Action liftDown3 = lift.liftDown(0);
@@ -122,7 +122,7 @@ public class BlueSpecAuto extends LinearOpMode {
 
         TrajectoryActionBuilder drive4 = drive.actionBuilder(new Pose2d(51, -61, Math.toRadians(270)))
                 .strafeTo(new Vector2d(42, -50), null, new ProfileAccelConstraint(-80, 80))
-                .splineToLinearHeading(new Pose2d(-8 + halfWidth, -45.5 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(-8 + halfWidth, -45.3 + halfLength, Math.toRadians(83)), Math.toRadians(83), null, new ProfileAccelConstraint(-80, 80))
                 ;
 
         TrajectoryActionBuilder drive5 = drive.actionBuilder(new Pose2d(-15 + halfWidth, -45 + halfLength, Math.toRadians(90)))
@@ -255,6 +255,7 @@ public class BlueSpecAuto extends LinearOpMode {
                                     trajectoryAction4),
                             new SequentialAction(
                                     liftToLowPosition2,
+                                    new SleepAction(0.3),
                                     openTopClaw3),
                             new ParallelAction(
                                     liftDown2,
@@ -274,6 +275,7 @@ public class BlueSpecAuto extends LinearOpMode {
                             new SequentialAction(
                                     trajectoryAction7half,
                                     liftToLowPosition3,
+                                    new SleepAction(0.5),
                                     openTopClaw5,
                                     trajectoryActionBack,
                                     liftDown3)
