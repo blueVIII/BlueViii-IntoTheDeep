@@ -71,9 +71,9 @@ public class BlueSpecAuto extends LinearOpMode {
 
         Action openTopClaw = servos.moveTopClaw(0.3);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.2); // for specimen
-        Action flipTClawOut2 = servos.moveFlipTClaw(0.2); // for specimen
-        Action flipTClawOut5 = servos.moveFlipTClaw(0.21); // for specimen
+        Action flipTClawOut = servos.moveFlipTClaw(0.25); // for specimen
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.25); // for specimen
+        Action flipTClawOut5 = servos.moveFlipTClaw(0.25); // for specimen
         Action flipTClawOutNew = servos.moveFlipTClaw(0.25); // for specimen
 
         Action flipTClawIn = servos.moveFlipTClaw(1.0);
@@ -81,7 +81,7 @@ public class BlueSpecAuto extends LinearOpMode {
         Action rotateTClaw2 = servos.moveRotateTClaw(0.88); // for specimen
         Action rotateTClawNew = servos.moveRotateTClaw(0.65); // for specimen
 
-        Action flipTClawOut4 = servos.moveFlipTClaw(0.21);
+        Action flipTClawOut4 = servos.moveFlipTClaw(0.25);
         Action openTopClaw4 = servos.moveTopClaw(0.3);
         Action openTopClaw5 = servos.moveTopClaw(0.3);
         Action openTopClaw6 = servos.moveTopClaw(0.3);
@@ -89,7 +89,7 @@ public class BlueSpecAuto extends LinearOpMode {
 
         ;
         TrajectoryActionBuilder drive1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(-15 + halfWidth, -45 + halfLength));
+                .strafeTo(new Vector2d(-15 + halfWidth, -44 + halfLength));
 
         TrajectoryActionBuilder drive2 = drive.actionBuilder(new Pose2d(-7 + halfWidth, -45.5 + halfLength,Math.toRadians(90)))
                 .lineToY(-50 + halfLength, null, new ProfileAccelConstraint(-80, 80))

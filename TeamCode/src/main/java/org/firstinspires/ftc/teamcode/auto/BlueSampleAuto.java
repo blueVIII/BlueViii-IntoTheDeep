@@ -49,7 +49,7 @@ public class BlueSampleAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(63 - halfWidth, 63 -  halfLength, Math.toRadians(30)),Math.toRadians(30), null, new ProfileAccelConstraint(-80, 80));
 
         TrajectoryActionBuilder driveBack = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(30)))
-                .splineToLinearHeading(new Pose2d(58 - halfWidth, 52.5 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-80, 80))
+                .splineToLinearHeading(new Pose2d(58 - halfWidth, 52.5 - halfLength, Math.toRadians(78)),  Math.toRadians(78),null, new ProfileAccelConstraint(-70, 70))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket2 = drive.actionBuilder(new Pose2d(57 - halfWidth, 52 - halfLength, Math.toRadians(90)))
@@ -68,7 +68,7 @@ public class BlueSampleAuto extends LinearOpMode {
         TrajectoryActionBuilder driveBack2 = drive.actionBuilder(new Pose2d(63 - halfWidth, 63 - halfLength, Math.toRadians(40)))
                 .lineToY(60 - halfLength)
                 .splineToLinearHeading(new Pose2d(56.5 - halfWidth, 50 - halfLength, Math.toRadians(87)),  Math.toRadians(87),null, new ProfileAccelConstraint(-80, 80))
-                .strafeTo(new Vector2d(73 - halfWidth, 47.5 - halfLength))
+                .strafeTo(new Vector2d(71.5 - halfWidth, 47.5 - halfLength))
                 ; //-1170
 
         TrajectoryActionBuilder driveToBucket3 = drive.actionBuilder(new Pose2d(73 - halfWidth, 50 - halfLength, Math.toRadians(90)))
@@ -102,9 +102,9 @@ public class BlueSampleAuto extends LinearOpMode {
         Action openTopClaw = servos.moveTopClaw(0.0);
         Action openTopClaw2 = servos.moveTopClaw(0.0);
         Action openTopClaw3 = servos.moveTopClaw(0.0);
-        Action flipTClawOut = servos.moveFlipTClaw(0.47); // for sample
-        Action flipTClawOut2 = servos.moveFlipTClaw(0.47); // for sample
-        Action flipTClawOut3 = servos.moveFlipTClaw(0.47); // for sample
+        Action flipTClawOut = servos.moveFlipTClaw(0.55); // for sample
+        Action flipTClawOut2 = servos.moveFlipTClaw(0.55); // for sample
+        Action flipTClawOut3 = servos.moveFlipTClaw(0.55); // for sample
         Action rotateTClaw = servos.moveRotateTClaw(1); // for sample
         Action rotateTClaw2 = servos.moveRotateTClaw(1); // for sample
         Action rotateTClaw3 = servos.moveRotateTClaw(1); // for sample
@@ -113,18 +113,20 @@ public class BlueSampleAuto extends LinearOpMode {
         Action closeTopClaw3 = servos.moveTopClaw(1.0);
         Action closeBottomClaw = servos.moveBottomClaw(1.0);
         Action closeBottomClaw2 = servos.moveBottomClaw(1.0);
-        Action openBottomClaw = servos.moveBottomClaw(0.0);
-        Action openBottomClaw2 = servos.moveBottomClaw(0.0);
-        Action openBottomClaw3 = servos.moveBottomClaw(0.0);
-        Action openBottomClaw4 = servos.moveBottomClaw(0.0);
+        Action closeBottomClaw3 = servos.moveBottomClaw(1.0);
+        Action closeBottomClaw4 = servos.moveBottomClaw(1.0);
+        Action openBottomClaw = servos.moveBottomClaw(0.4);
+        Action openBottomClaw2 = servos.moveBottomClaw(0.4);
+        Action openBottomClaw3 = servos.moveBottomClaw(0.4);
+        Action openBottomClaw4 = servos.moveBottomClaw(0.4);
         Action rotateArmOut    = servos.moveRotateArm(1.0);
         Action rotateArmOut2    = servos.moveRotateArm(1.0);
         Action rotateArmIn    = servos.moveRotateArm(0.0);
         Action rotateArmIn2    = servos.moveRotateArm(0.0);
-        Action slideIntakeOut = slideIntake1.slideOut(-450);
-        Action slideIntakeOut2 = slideIntake1.slideOut(-450);
-        Action slideIntakeIn = slideIntake1.slideIn(-120);
-        Action slideIntakeIn2 = slideIntake1.slideIn(-120);
+        Action slideIntakeOut = slideIntake1.slideOut(-320);
+        Action slideIntakeOut2 = slideIntake1.slideOut(-155);
+        Action slideIntakeIn = slideIntake1.slideIn(-140);
+        Action slideIntakeIn2 = slideIntake1.slideIn(-130);
         Action slideIntakeIn3 = slideIntake1.slideIn(0);
         Action rotateBClaw = servos.moveRotateBClaw(0.37);
         Action flipTClawIn = servos.moveFlipTClaw(1.0);
@@ -165,11 +167,12 @@ public class BlueSampleAuto extends LinearOpMode {
                             new ParallelAction(
                                     trajectoryBack,
                                     liftDown,
-                                    slideIntakeOut
+                                    slideIntakeOut,
+                                    closeBottomClaw4
                             ),
                             new SequentialAction(
-                                    openBottomClaw,
                                     rotateArmOut,
+                                    openBottomClaw,
                                     new SleepAction(1.0),
                                     closeBottomClaw,
                                     new SleepAction(0.5),
@@ -201,11 +204,12 @@ public class BlueSampleAuto extends LinearOpMode {
                             new ParallelAction(
                                     trajectoryBack2,
                                     liftDown2,
-                                    slideIntakeOut2
+                                    slideIntakeOut2,
+                                    closeBottomClaw3
                             ),
                             new SequentialAction(
-                                    openBottomClaw3,
                                     rotateArmOut2,
+                                    openBottomClaw3,
                                     new SleepAction(1.0),
                                     closeBottomClaw2,
                                     new SleepAction(0.5),
